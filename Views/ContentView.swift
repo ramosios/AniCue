@@ -31,4 +31,3 @@ struct ContentView: View {
         .edgesIgnoringSafeArea(.bottom)
     }
 }
-

@@ -47,5 +47,7 @@ struct CustomTabBarView: View {
         .clipShape(RoundedRectangle(cornerRadius: 25, style: .continuous))
         .padding(.horizontal)
         .shadow(color: .black.opacity(0.05), radius: 10, x: 0, y: -2)
+        .cornerRadius(16)
+        .shadow(radius: 4)
     }
 }

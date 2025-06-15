@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct DiscoverView: View {
-    
     var body: some View {
         Text("Hello, world!")
     }
