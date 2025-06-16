@@ -5,23 +5,7 @@
 //  Created by Jorge Ramos on 14/06/25.
 //
 import Foundation
-enum OpenAIError: Error, LocalizedError {
-    case missingAPIKey
-    case invalidResponse
-    case decodingFailed
-    case emptyChoices
-    case serverError(String)
 
-    var errorDescription: String? {
-        switch self {
-        case .missingAPIKey: return "Missing OpenAI API key."
-        case .invalidResponse: return "Invalid response from OpenAI."
-        case .decodingFailed: return "Failed to decode OpenAI response."
-        case .emptyChoices: return "No suggestions received."
-        case .serverError(let message): return "OpenAI server error: \(message)"
-        }
-    }
-}
 struct OpenAIService {
     let apiKey = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String ?? ""
 
