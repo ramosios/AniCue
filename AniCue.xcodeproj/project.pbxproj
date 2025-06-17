@@ -64,6 +64,9 @@
 				Views/Profile/ProfileView.swift,
 				Views/Profile/UserPreferenceView.swift,
 				Views/Profile/WatchedAnimeView.swift,
+				Views/ReusableViews/ErrorBanner.swift,
+				Views/ReusableViews/LoadingView.swift,
+				Views/ReusableViews/PromptInputView.swift,
 				Views/WatchlistView.swift,
 			);
 			target = C123CCFC2DFE2DB700B27340 /* AniCue */;
@@ -88,6 +91,9 @@
 				Views/Profile/ProfileView.swift,
 				Views/Profile/UserPreferenceView.swift,
 				Views/Profile/WatchedAnimeView.swift,
+				Views/ReusableViews/ErrorBanner.swift,
+				Views/ReusableViews/LoadingView.swift,
+				Views/ReusableViews/PromptInputView.swift,
 				Views/WatchlistView.swift,
 			);
 			target = C123CD0C2DFE2DB800B27340 /* AniCueTests */;

@@ -20,8 +20,8 @@ struct OpenAIService {
         guard !apiKey.isEmpty else {
             throw OpenAIError.missingAPIKey
         }
-
-        let fullPrompt = "Recommend up to 5 movies for the following prompt ,just give movie title:"
+        let preferenceText = formatPreferences(userPreferences)
+        let fullPrompt = "Recommend up tp 5 animes for the following prompt just give anime title: \(prompt).\n\(preferenceText)"
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             throw OpenAIError.invalidResponse
         }
