@@ -40,4 +40,3 @@ class UserPreferencesViewModel: ObservableObject {
         overrideFileURL ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName)
     }
 }
-

@@ -7,18 +7,25 @@
 import Foundation
 
 struct OpenAIService {
-    let apiKey = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String ?? ""
+    let apiKey: String
+    let session: URLSession
 
-    func fetchAnimeTitles(prompt: String,userPreferences: [String],excluding animesToAvoid: [String]) async throws -> [String] {
+    init(apiKey: String = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String ?? "",
+         session: URLSession = .shared) {
+        self.apiKey = apiKey
+        self.session = session
+    }
+
+    func fetchAnimeTitles(prompt: String, userPreferences: [String], excluding animesToAvoid: [String]) async throws -> [String] {
         guard !apiKey.isEmpty else {
             throw OpenAIError.missingAPIKey
         }
 
         let fullPrompt = "Recommend up to 5 movies for the following prompt ,just give movie title:"
-
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else {
             throw OpenAIError.invalidResponse
         }
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.addValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
@@ -31,7 +38,7 @@ struct OpenAIService {
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
-        let (data, response) = try await URLSession.shared.data(for: request)
+        let (data, response) = try await session.data(for: request)
 
         if let httpResp = response as? HTTPURLResponse, !(200...299).contains(httpResp.statusCode) {
             let message = String(data: data, encoding: .utf8) ?? "Unknown error"

@@ -96,4 +96,3 @@ struct ProfileNavigationLink<Destination: View>: View {
         }
     }
 }
-

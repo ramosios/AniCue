@@ -15,7 +15,7 @@ struct OpenAIResponse: Codable {
         let content: String
     }
 }
-enum OpenAIError: Error, LocalizedError {
+enum OpenAIError: Error, LocalizedError , Equatable {
     case missingAPIKey
     case invalidResponse
     case decodingFailed
