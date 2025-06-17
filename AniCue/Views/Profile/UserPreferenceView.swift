@@ -70,4 +70,3 @@ struct UserPreferenceView: View {
         }
     }
 }
-

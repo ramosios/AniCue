@@ -8,11 +8,17 @@ import Foundation
 
 class UserPreferencesViewModel: ObservableObject {
     @Published var selectedAnswers: [String] = ["", "", ""]
-
     private let fileName = "user_preferences.json"
-    init() {
-        loadAnswers()
+
+    // Allow tests to override the file path
+    var overrideFileURL: URL?
+
+    init(useInitialLoad: Bool = true) {
+        if useInitialLoad {
+            loadAnswers()
+        }
     }
+
     func saveAnswers() {
         let preferences = UserPreferences(answers: selectedAnswers)
         if let data = try? JSONEncoder().encode(preferences),
@@ -31,6 +37,7 @@ class UserPreferencesViewModel: ObservableObject {
     }
 
     private func getFileURL() -> URL? {
-        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName)
+        overrideFileURL ?? FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent(fileName)
     }
 }
+
