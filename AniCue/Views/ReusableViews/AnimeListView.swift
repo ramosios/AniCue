@@ -1,24 +1,18 @@
-//
-//  AnimeListView.swift
-//  AniCue
-//
-//  Created by Jorge Ramos on 18/06/25.
-//
 import SwiftUI
 
 struct AnimeListView: View {
-    let animes: [Anime]
-    var onSelect: ((Anime) -> Void)?
+    let animes: [JikanAnime]
+    var onSelect: ((JikanAnime) -> Void)?
 
     var body: some View {
         ScrollView {
             LazyVStack(spacing: 16) {
-                ForEach(animes) { anime in
+                ForEach(animes, id: \.malId) { anime in
                     Button(action: {
                         onSelect?(anime)
                     }) {
                         HStack(alignment: .top, spacing: 12) {
-                            AsyncImage(url: anime.imageURL) { image in
+                            AsyncImage(url: anime.images?["jpg"]?.imageUrl.flatMap(URL.init)) { image in
                                 image
                                     .resizable()
                                     .aspectRatio(contentMode: .fill)
@@ -46,8 +40,8 @@ struct AnimeListView: View {
                                         .foregroundColor(.secondary)
                                 }
 
-                                if let rating = anime.rating {
-                                    Label(rating, systemImage: "person.crop.circle.badge.exclamationmark")
+                                if let source = anime.source {
+                                    Label(source, systemImage: "person.crop.circle.badge.exclamationmark")
                                         .font(.subheadline)
                                         .foregroundColor(.red)
                                 }

@@ -11,22 +11,24 @@ struct ContentView: View {
     @State private var selectedTab: CustomTabBarView.Tab = .discover
 
     var body: some View {
-        VStack(spacing: 0) {
-            // Main content area
-            Group {
-                switch selectedTab {
-                case .discover:
-                    DiscoverView()
-                case .watchlist:
-                    WatchlistView()
-                case .profile:
-                    ProfileView()
+        TabView(selection: $selectedTab) {
+            DiscoverView()
+                .tag(CustomTabBarView.Tab.discover)
+                .tabItem {
+                    Label("Discover", systemImage: "sparkles")
                 }
-            }
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
-            // Tab bar
-            CustomTabBarView(selectedTab: $selectedTab)
+            WatchlistView()
+                .tag(CustomTabBarView.Tab.watchlist)
+                .tabItem {
+                    Label("Watchlist", systemImage: "bookmark")
+                }
+
+            ProfileView()
+                .tag(CustomTabBarView.Tab.profile)
+                .tabItem {
+                    Label("Profile", systemImage: "person")
+                }
         }
         .edgesIgnoringSafeArea(.bottom)
     }

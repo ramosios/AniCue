@@ -32,6 +32,7 @@ struct DiscoverView: View {
                         LoadingView()
                             .padding(.top, 40)
                     } else {
+                        AnimeListView(animes: viewModel.animes)
                     }
                 }
                 .padding(.vertical)

@@ -16,6 +16,26 @@ enum JikanAPIError: Error, LocalizedError {
     }
 }
 
+enum JikanBatchError: Error, LocalizedError {
+    case invalidTitleURL(title: String)
+    case serverError(title: String, message: String)
+    case decodingError(title: String)
+    case genericError(title: String, error: Error)
+
+    var errorDescription: String? {
+        switch self {
+        case .invalidTitleURL(let title):
+            return "Invalid URL for title: \(title)"
+        case .serverError(let title, let message):
+            return "Request failed for title \(title): \(message)"
+        case .decodingError(let title):
+            return "Decoding error for title: \(title)"
+        case .genericError(let title, let error):
+            return "Error fetching anime for title \(title): \(error.localizedDescription)"
+        }
+    }
+}
+
 struct JikanService {
     private let baseURL = "https://api.jikan.moe/v4"
 
@@ -53,4 +73,39 @@ struct JikanService {
             throw JikanAPIError.decodingFailed
         }
     }
+
+    func fetchAnimes(for titles: [String]) async throws -> [JikanAnime] {
+        var all: [JikanAnime] = []
+
+        for title in titles {
+            let encoded = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            guard let url = URL(string: "\(baseURL)/anime?q=\(encoded)&limit=1") else {
+                throw JikanBatchError.invalidTitleURL(title: title)
+            }
+
+            do {
+                let (data, response) = try await URLSession.shared.data(from: url)
+
+                if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+                    let message = String(data: data, encoding: .utf8) ?? "Unknown error"
+                    throw JikanBatchError.serverError(title: title, message: message)
+                }
+
+                let result = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
+                if let first = result.data.first {
+                    all.append(first)
+                } else {
+                    throw JikanBatchError.serverError(title: title, message: "No anime found")
+                }
+
+            } catch is DecodingError {
+                throw JikanBatchError.decodingError(title: title)
+            } catch {
+                throw JikanBatchError.genericError(title: title, error: error)
+            }
+        }
+
+        return all
+    }
 }
+

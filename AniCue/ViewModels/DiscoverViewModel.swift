@@ -8,10 +8,11 @@ import Foundation
 
 @MainActor
 class DiscoverViewModel: ObservableObject {
-    @Published var animes: [Anime] = []
+    @Published var animes: [JikanAnime] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
     private let openAIService = OpenAIService()
+    private let jikaService = JikanService()
     func getRecommendations(for prompt: String, userPreferences: [String],avoiding animesToAvoid: [String]) async {
         isLoading = true
         errorMessage = nil
@@ -19,7 +20,7 @@ class DiscoverViewModel: ObservableObject {
 
         do {
             let titles = try await openAIService.fetchAnimeTitles(prompt: prompt, userPreferences: userPreferences, excluding: animesToAvoid)
-            print(titles)
+            self.animes = try await jikaService.fetchAnimes(for: titles)
         } catch let error as LocalizedError {
             self.errorMessage = error.errorDescription
         } catch {
