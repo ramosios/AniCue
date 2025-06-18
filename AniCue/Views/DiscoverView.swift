@@ -32,7 +32,6 @@ struct DiscoverView: View {
                         LoadingView()
                             .padding(.top, 40)
                     } else {
-                        
                     }
                 }
                 .padding(.vertical)
