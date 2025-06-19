@@ -7,7 +7,11 @@
 import Foundation
 
 class UserPreferencesViewModel: ObservableObject {
-    @Published var selectedAnswers: [String] = ["", "", ""]
+    @Published var selectedAnswers: [String] = ["", "", ""] {
+        didSet {
+            saveAnswers()
+        }
+    }
     private let fileName = "user_preferences.json"
 
     // Allow tests to override the file path

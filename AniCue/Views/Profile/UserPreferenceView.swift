@@ -1,7 +1,8 @@
 import SwiftUI
 
 struct UserPreferenceView: View {
-    @StateObject private var viewModel = UserPreferencesViewModel()
+    @EnvironmentObject var viewModel: UserPreferencesViewModel
+
 
     private let questions = [
         ("Preferred anime length?", "clock"),
