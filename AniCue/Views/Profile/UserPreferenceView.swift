@@ -3,7 +3,6 @@ import SwiftUI
 struct UserPreferenceView: View {
     @EnvironmentObject var viewModel: UserPreferencesViewModel
 
-
     private let questions = [
         ("Preferred anime length?", "clock"),
         ("Do you prefer new or old anime?", "calendar"),

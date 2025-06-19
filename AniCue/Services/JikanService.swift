@@ -108,4 +108,3 @@ struct JikanService {
         return all
     }
 }
-
