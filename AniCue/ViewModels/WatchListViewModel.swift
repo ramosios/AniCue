@@ -6,11 +6,7 @@
 //
 import Foundation
 class WatchListViewModel: ObservableObject {
-    @Published private(set) var watchList: [JikanAnime] = [] {
-        didSet {
-            saveWatchList()
-        }
-    }
+    @Published private(set) var watchList: [JikanAnime] = [] 
 
     private let storageKey = "WATCHLIST"
 
