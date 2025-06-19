@@ -10,6 +10,8 @@ import SwiftUI
 struct DiscoverView: View {
     @StateObject private var viewModel = DiscoverViewModel()
     @EnvironmentObject var userPreferences: UserPreferencesViewModel
+    @EnvironmentObject var favorites: WatchListViewModel
+    @EnvironmentObject var watched: WatchedViewModel
     @State private var prompt = ""
 
     var body: some View {
