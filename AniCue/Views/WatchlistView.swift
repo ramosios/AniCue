@@ -7,7 +7,18 @@
 import SwiftUI
 
 struct WatchlistView: View {
+    @EnvironmentObject var watchList: WatchListViewModel
+
     var body: some View {
-        Text("Hello, world!")
+        NavigationView {
+            if watchList.watchList.isEmpty {
+                Text("You haven't added any anime to you watchlist.")
+                    .padding()
+                    .navigationTitle("Watchlist")
+            } else {
+                AnimeListView(animes: watchList.watchList)
+                .navigationTitle("Watchlist")
+            }
+        }
     }
 }

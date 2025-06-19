@@ -4,6 +4,7 @@
 //
 //  Created by Jorge Ramos on 19/06/25.
 //
+
 import Foundation
 import SwiftUI
 
@@ -16,16 +17,31 @@ struct AnimeRowView: View {
 
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            AsyncImage(url: anime.images?["jpg"]?.imageUrl.flatMap(URL.init)) { image in
-                image
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            } placeholder: {
+            let imageURLString = anime.images?["jpg"]?.imageUrl ??
+                                 anime.images?["jpg"]?.largeImageUrl ??
+                                 anime.images?["webp"]?.imageUrl ??
+                                 anime.images?["webp"]?.largeImageUrl
+
+            if let url = imageURLString.flatMap(URL.init) {
+                AsyncImage(url: url) { phase in
+                    switch phase {
+                    case .success(let image):
+                        image
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                    default:
+                        Color.gray.opacity(0.2)
+                    }
+                }
+                .frame(width: 90, height: 130)
+                .cornerRadius(12)
+                .clipped()
+            } else {
                 Color.gray.opacity(0.2)
+                    .frame(width: 90, height: 130)
+                    .cornerRadius(12)
+                    .clipped()
             }
-            .frame(width: 90, height: 130)
-            .cornerRadius(12)
-            .clipped()
 
             VStack(alignment: .leading, spacing: 8) {
                 Text(anime.title)
