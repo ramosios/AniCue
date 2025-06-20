@@ -11,14 +11,25 @@ struct WatchlistView: View {
 
     var body: some View {
         NavigationView {
-            if watchList.watchList.isEmpty {
-                Text("You haven't added any anime to you watchlist.")
+            Group {
+                if watchList.watchList.isEmpty {
+                    VStack(spacing: 16) {
+                        Image(systemName: "tray")
+                            .font(.system(size: 40))
+                            .foregroundColor(.gray)
+                        Text("Your watchlist is empty.")
+                            .font(.headline)
+                        Text("Add some anime to get started!")
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                    }
                     .padding()
-                    .navigationTitle("Watchlist")
-            } else {
-                AnimeListView(animes: watchList.watchList)
-                .navigationTitle("Watchlist")
+                    .multilineTextAlignment(.center)
+                } else {
+                    AnimeListView(animes: watchList.watchList)
+                }
             }
+            .navigationTitle("Watchlist")
         }
     }
 }
