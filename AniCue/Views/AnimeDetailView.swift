@@ -1,118 +1,92 @@
-//
-//  AnimeDetailView.swift
-//  AniCue
-//
-//  Created by Jorge Ramos on 18/06/25.
-//
 import SwiftUI
 
 struct AnimeDetailView: View {
-    let anime: Anime
+    let anime: JikanAnime
 
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                AsyncImage(url: anime.imageURL) { image in
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .cornerRadius(16)
-                        .shadow(radius: 5)
-                } placeholder: {
-                    RoundedRectangle(cornerRadius: 16)
-                        .fill(Color.gray.opacity(0.2))
-                        .frame(height: 250)
+                if let imageUrlString = anime.images?["jpg"]?.largeImageUrl,
+                   let url = URL(string: imageUrlString) {
+                    AsyncImage(url: url) { phase in
+                        switch phase {
+                        case .empty:
+                            ProgressView()
+                        case .success(let image):
+                            image
+                                .resizable()
+                                .scaledToFit()
+                                .cornerRadius(12)
+                        case .failure:
+                            Image(systemName: "photo")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(height: 200)
+                                .foregroundColor(.gray)
+                        @unknown default:
+                            EmptyView()
+                        }
+                    }
                 }
 
                 Text(anime.title)
                     .font(.title)
                     .bold()
-                    .padding(.top, 4)
 
-                if let synopsis = anime.synopsis {
-                    Text(synopsis)
-                        .font(.body)
+                if let titleJapanese = anime.titleJapanese, !titleJapanese.isEmpty {
+                    Text("Japanese: \(titleJapanese)")
+                        .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
 
-                Divider()
+                if let synopsis = anime.synopsis, !synopsis.isEmpty {
+                    Text(synopsis)
+                        .font(.body)
+                }
 
                 Group {
                     if let score = anime.score {
-                        Label("Score: \(String(format: "%.1f", score))", systemImage: "star.fill")
+                        Text("Score: \(String(format: "%.2f", score))")
                     }
-
+                    if let rank = anime.rank {
+                        Text("Rank: #\(rank)")
+                    }
+                    if let popularity = anime.popularity {
+                        Text("Popularity: #\(popularity)")
+                    }
                     if let episodes = anime.episodes {
-                        Label("Episodes: \(episodes)", systemImage: "film")
+                        Text("Episodes: \(episodes)")
                     }
-
-                    if let type = anime.type {
-                        Label("Type: \(type)", systemImage: "tv")
+                    if let duration = anime.duration, !duration.isEmpty {
+                        Text("Duration: \(duration)")
                     }
-
-                    if let rating = anime.rating {
-                        Label("Rating: \(rating)", systemImage: "person.crop.circle.badge.exclamationmark")
-                    }
-
-                    if let status = anime.status {
-                        Label("Status: \(status)", systemImage: "waveform.path.ecg")
-                    }
-
-                    if let duration = anime.duration {
-                        Label("Duration: \(duration)", systemImage: "clock")
-                    }
-
-                    if let start = anime.startDate {
-                        Label("Started: \(start)", systemImage: "calendar")
-                    }
-
-                    if let end = anime.endDate {
-                        Label("Ended: \(end)", systemImage: "calendar.badge.clock")
+                    if let status = anime.status, !status.isEmpty {
+                        Text("Status: \(status)")
                     }
                 }
-                .font(.subheadline)
-                .foregroundColor(.secondary)
+                .font(.callout)
+                .foregroundColor(.gray)
 
                 if let genres = anime.genres, !genres.isEmpty {
-                    Text("Genres")
-                        .font(.headline)
-                        .padding(.top)
+                    Text("Genres: \(genres.map(\.name).joined(separator: ", "))")
+                }
 
-                    FlowLayout(alignment: .leading, spacing: 8) {
-                        ForEach(genres, id: \.malID) { genre in
-                            Text(genre.name)
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(Color.blue.opacity(0.1))
-                                .foregroundColor(.blue)
-                                .clipShape(Capsule())
+                if let streaming = anime.streaming, !streaming.isEmpty {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Available on:")
+                            .bold()
+                        ForEach(streaming, id: \.url) { platform in
+                            if let url = URL(string: platform.url) {
+                                Link(platform.name, destination: url)
+                                    .foregroundColor(.blue)
+                            }
                         }
                     }
                 }
-
-                Spacer()
             }
             .padding()
         }
-        .navigationTitle("Details")
+        .navigationTitle("Anime Details")
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-struct FlowLayout<Content: View>: View {
-    let alignment: HorizontalAlignment
-    let spacing: CGFloat
-    let content: () -> Content
-
-    init(alignment: HorizontalAlignment = .leading, spacing: CGFloat = 8, @ViewBuilder content: @escaping () -> Content) {
-        self.alignment = alignment
-        self.spacing = spacing
-        self.content = content
-    }
-
-    var body: some View {
-        VStack(alignment: alignment, spacing: spacing) {
-            content()
-        }
     }
 }

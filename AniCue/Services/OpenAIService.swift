@@ -56,12 +56,11 @@ struct OpenAIService {
     }
     func buildAnimePrompt(from prompt: String, userPreferences: [String], animesToAvoid: [JikanAnime]) -> String {
         let preferenceText = formatPreferences(userPreferences)
-        let avoidMovies = "also avoid anime movies that are not standalone"
         let avoidList = animesToAvoid.map(\.title).filter { !$0.isEmpty }
         let avoidText = avoidList.isEmpty ? "" :
             "\nAvoid these movies as they've already been watched or added to my watchlist: " +
             avoidList.prefix(30).joined(separator: ", ")
 
-        return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(avoidText)\(avoidMovies)."
+        return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(avoidText)."
     }
 }

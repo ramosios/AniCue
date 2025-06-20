@@ -4,7 +4,6 @@ struct AnimeListView: View {
     @EnvironmentObject var favorites: WatchListViewModel
     @EnvironmentObject var watched: WatchedViewModel
     let animes: [JikanAnime]
-    var onSelect: ((JikanAnime) -> Void)?
 
     var body: some View {
         ScrollView {
@@ -13,9 +12,7 @@ struct AnimeListView: View {
                     let isFavorite = favorites.isWatchListed(anime)
                     let isWatched = watched.isWatched(anime)
 
-                    Button(action: {
-                        onSelect?(anime)
-                    }) {
+                    NavigationLink(destination: AnimeDetailView(anime: anime)) {
                         AnimeRowView(
                             anime: anime,
                             isFavorite: isFavorite,
@@ -47,5 +44,7 @@ struct AnimeListView: View {
             }
             .padding()
         }
+        .navigationTitle("Anime List")
     }
 }
+

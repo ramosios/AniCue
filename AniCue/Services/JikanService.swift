@@ -79,7 +79,7 @@ struct JikanService {
 
         for title in titles {
             let encoded = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            guard let url = URL(string: "\(baseURL)/anime?q=\(encoded)&limit=1") else {
+            guard let url = URL(string: "\(baseURL)/anime?q=\(encoded)&limit=5") else {
                 throw JikanBatchError.invalidTitleURL(title: title)
             }
 
@@ -92,7 +92,10 @@ struct JikanService {
                 }
 
                 let result = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
-                if let first = result.data.first {
+
+                if let firstTV = result.data.first(where: { $0.type == "TV" }) {
+                    all.append(firstTV)
+                } else if let first = result.data.first {
                     all.append(first)
                 } else {
                     throw JikanBatchError.serverError(title: title, message: "No anime found")

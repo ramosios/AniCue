@@ -29,6 +29,7 @@ class WatchListViewModel: ObservableObject {
 
     func clearAll() {
         watchList.removeAll()
+        saveWatchList()
     }
 
     private func saveWatchList() {
