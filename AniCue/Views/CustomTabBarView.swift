@@ -9,7 +9,7 @@ struct CustomTabBarView: View {
         var iconName: String {
             switch self {
             case .discover: return "sparkles"
-            case .watchlist: return "bookmark.fill"
+            case .watchlist: return "heart.fill"
             case .profile: return "person.crop.circle"
             }
         }

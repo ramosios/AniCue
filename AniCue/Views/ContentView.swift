@@ -21,7 +21,7 @@ struct ContentView: View {
             WatchlistView()
                 .tag(CustomTabBarView.Tab.watchlist)
                 .tabItem {
-                    Label("Watchlist", systemImage: "bookmark")
+                    Label("Watchlist", systemImage: "heart.fill")
                 }
 
             ProfileView()

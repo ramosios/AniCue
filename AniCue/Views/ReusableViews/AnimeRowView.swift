@@ -72,12 +72,12 @@ struct AnimeRowView: View {
                         .font(.subheadline)
                         .foregroundColor(.secondary)
                 }
+            }
 
-                if let source = anime.source {
-                    Label(source, systemImage: "sparkles")
-                        .font(.subheadline)
-                        .foregroundColor(.blue)
-                }
+            if let source = anime.source {
+                Label(source, systemImage: "sparkles")
+                    .font(.subheadline)
+                    .foregroundColor(.blue)
             }
 
             HStack(spacing: 14) {

@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ProfileView: View {
+    @EnvironmentObject var favorites: WatchListViewModel
+    @EnvironmentObject var watched: WatchedViewModel
     @State private var showingConfirmReset = false
 
     var body: some View {
@@ -62,7 +64,8 @@ struct ProfileView: View {
             .navigationTitle("Profile")
             .alert("Are you sure you want to clear all data?", isPresented: $showingConfirmReset) {
                 Button("Clear All", role: .destructive) {
-                    print("Clear all data")
+                    favorites.clearAll()
+                    watched.clearAll()
                 }
                 Button("Cancel", role: .cancel) {}
             }
