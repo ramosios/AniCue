@@ -1,10 +1,3 @@
-//
-//  AnimeRowView.swift
-//  AniCue
-//
-//  Created by Jorge Ramos on 19/06/25.
-//
-
 import SwiftUI
 
 struct AnimeRowView: View {
@@ -32,8 +25,11 @@ struct AnimeRowView: View {
                              anime.images?["webp"]?.imageUrl ??
                              anime.images?["webp"]?.largeImageUrl
 
+        // Append a cache-busting UUID to force reload
+        let cacheBustingURL = imageURLString.flatMap { "\($0)?v=\(UUID().uuidString)" }
+
         return Group {
-            if let url = imageURLString.flatMap(URL.init) {
+            if let urlString = cacheBustingURL, let url = URL(string: urlString) {
                 AsyncImage(url: url) { phase in
                     switch phase {
                     case .success(let image):
@@ -44,6 +40,7 @@ struct AnimeRowView: View {
                         Color.gray.opacity(0.3)
                     }
                 }
+                .id(anime.malId) // Force SwiftUI to treat the image as a new view when ID changes
             } else {
                 Color.gray.opacity(0.3)
             }
