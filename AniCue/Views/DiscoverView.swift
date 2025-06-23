@@ -20,7 +20,7 @@ struct DiscoverView: View {
                 VStack(spacing: 24) {
                     PromptInputView(prompt: $prompt) {
                         Task {
-                            let avoid = favorites.watchList + watched.watched
+                            let avoid = favorites.animes + watched.animes
                             let preferences = userPreferences.selectedAnswers
                             await viewModel.getRecommendations(for: prompt, userPreferences: preferences, avoiding: avoid)
                         }

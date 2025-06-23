@@ -12,7 +12,7 @@ struct WatchlistView: View {
     var body: some View {
         NavigationView {
             Group {
-                if watchList.watchList.isEmpty {
+                if watchList.animes.isEmpty {
                     VStack(spacing: 16) {
                         Image(systemName: "tray")
                             .font(.system(size: 40))
@@ -26,7 +26,7 @@ struct WatchlistView: View {
                     .padding()
                     .multilineTextAlignment(.center)
                 } else {
-                    AnimeListView(animes: watchList.watchList)
+                    AnimeListView(animes: watchList.animes)
                 }
             }
             .navigationTitle("Watchlist")

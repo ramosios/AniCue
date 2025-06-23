@@ -28,7 +28,7 @@ struct ProfileView: View {
                                 .font(.title2)
                                 .fontWeight(.bold)
 
-                            Text("Watched \(watched.watched.count) anime titles")
+                            Text("Watched \(watched.animes.count) anime titles")
                                 .font(.subheadline)
                                 .foregroundColor(.secondary)
                         }
