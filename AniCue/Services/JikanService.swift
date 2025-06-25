@@ -1,6 +1,95 @@
 import Foundation
 
-enum JikanAPIError: Error, LocalizedError {
+protocol NetworkSession {
+    func data(from url: URL) async throws -> (Data, URLResponse)
+}
+
+extension URLSession: NetworkSession {}
+
+struct JikanService {
+    private let baseURL = "https://api.jikan.moe/v4"
+    private let session: NetworkSession
+
+    init(session: NetworkSession = URLSession.shared) {
+        self.session = session
+    }
+
+    func fetchAnime(by id: Int) async throws -> JikanAnime {
+        let urlString = "\(baseURL)/anime/\(id)"
+        guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
+
+        let (data, response) = try await session.data(from: url)
+        guard let httpResp = response as? HTTPURLResponse, (200...299).contains(httpResp.statusCode) else {
+            throw JikanAPIError.requestFailed
+        }
+
+        do {
+            let decoded = try JSONDecoder().decode(JikanAnimeResponse.self, from: data)
+            return decoded.data
+        } catch {
+            throw JikanAPIError.decodingFailed
+        }
+    }
+
+    func searchAnime(title: String) async throws -> [JikanAnime] {
+        let query = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+        let urlString = "\(baseURL)/anime?q=\(query)&limit=10"
+        guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
+
+        let (data, response) = try await session.data(from: url)
+        guard let httpResp = response as? HTTPURLResponse, (200...299).contains(httpResp.statusCode) else {
+            throw JikanAPIError.requestFailed
+        }
+
+        do {
+            let decoded = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
+            return decoded.data
+        } catch {
+            throw JikanAPIError.decodingFailed
+        }
+    }
+
+    func fetchAnimes(for titles: [String]) async throws -> [JikanAnime] {
+        var all: [JikanAnime] = []
+
+        for title in titles {
+            let encoded = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+            guard let url = URL(string: "\(baseURL)/anime?q=\(encoded)&limit=5") else {
+                throw JikanBatchError.invalidTitleURL(title: title)
+            }
+
+            do {
+                let (data, response) = try await session.data(from: url)
+
+                if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
+                    let message = String(data: data, encoding: .utf8) ?? "Unknown error"
+                    throw JikanBatchError.serverError(title: title, message: message)
+                }
+
+                let result = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
+
+                if let firstTV = result.data.first(where: { $0.type == "TV" }) {
+                    all.append(firstTV)
+                } else if let first = result.data.first {
+                    all.append(first)
+                } else {
+                    throw JikanBatchError.serverError(title: title, message: "No anime found")
+                }
+
+            } catch is DecodingError {
+                throw JikanBatchError.decodingError(title: title)
+            } catch let error as JikanBatchError {
+                throw error // preserve batch-specific errors
+            } catch {
+                throw JikanBatchError.genericError(title: title, error: error)
+            }
+        }
+
+        return all
+    }
+}
+
+enum JikanAPIError: Error, LocalizedError, Equatable {
     case invalidURL
     case requestFailed
     case decodingFailed
@@ -33,81 +122,5 @@ enum JikanBatchError: Error, LocalizedError {
         case .genericError(let title, let error):
             return "Error fetching anime for title \(title): \(error.localizedDescription)"
         }
-    }
-}
-
-struct JikanService {
-    private let baseURL = "https://api.jikan.moe/v4"
-
-    func fetchAnime(by id: Int) async throws -> JikanAnime {
-        let urlString = "\(baseURL)/anime/\(id)"
-        guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
-
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResp = response as? HTTPURLResponse, (200...299).contains(httpResp.statusCode) else {
-            throw JikanAPIError.requestFailed
-        }
-
-        do {
-            let decoded = try JSONDecoder().decode(JikanAnimeResponse.self, from: data)
-            return decoded.data
-        } catch {
-            throw JikanAPIError.decodingFailed
-        }
-    }
-
-    func searchAnime(title: String) async throws -> [JikanAnime] {
-        let query = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-        let urlString = "\(baseURL)/anime?q=\(query)&limit=10"
-        guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
-
-        let (data, response) = try await URLSession.shared.data(from: url)
-        guard let httpResp = response as? HTTPURLResponse, (200...299).contains(httpResp.statusCode) else {
-            throw JikanAPIError.requestFailed
-        }
-
-        do {
-            let decoded = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
-            return decoded.data
-        } catch {
-            throw JikanAPIError.decodingFailed
-        }
-    }
-
-    func fetchAnimes(for titles: [String]) async throws -> [JikanAnime] {
-        var all: [JikanAnime] = []
-
-        for title in titles {
-            let encoded = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
-            guard let url = URL(string: "\(baseURL)/anime?q=\(encoded)&limit=5") else {
-                throw JikanBatchError.invalidTitleURL(title: title)
-            }
-
-            do {
-                let (data, response) = try await URLSession.shared.data(from: url)
-
-                if let httpResponse = response as? HTTPURLResponse, !(200...299).contains(httpResponse.statusCode) {
-                    let message = String(data: data, encoding: .utf8) ?? "Unknown error"
-                    throw JikanBatchError.serverError(title: title, message: message)
-                }
-
-                let result = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
-
-                if let firstTV = result.data.first(where: { $0.type == "TV" }) {
-                    all.append(firstTV)
-                } else if let first = result.data.first {
-                    all.append(first)
-                } else {
-                    throw JikanBatchError.serverError(title: title, message: "No anime found")
-                }
-
-            } catch is DecodingError {
-                throw JikanBatchError.decodingError(title: title)
-            } catch {
-                throw JikanBatchError.genericError(title: title, error: error)
-            }
-        }
-
-        return all
     }
 }
