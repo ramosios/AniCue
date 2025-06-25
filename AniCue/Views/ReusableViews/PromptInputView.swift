@@ -47,7 +47,7 @@ struct PromptInputView: View {
             Button(action: {
                 guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
                 onSubmit()
-            }) {
+            }, label: {
                 HStack {
                     Image(systemName: "arrow.right.circle.fill")
                         .font(.system(size: 20))
@@ -59,7 +59,7 @@ struct PromptInputView: View {
                 .background(Color.accentColor)
                 .foregroundColor(.white)
                 .cornerRadius(14)
-            }
+            })
         }
         .padding()
     }

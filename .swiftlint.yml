@@ -41,7 +41,7 @@ identifier_name:
   min_length:
     warning: 3
     error: 2
-  excluded: [id, URL, x, y, i, j]
+  excluded: [id, URL, x, y, i, j, to]
 
 type_name:
   max_length:

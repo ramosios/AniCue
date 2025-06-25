@@ -36,7 +36,7 @@ struct UserPreferenceView: View {
                                     Button(action: {
                                         viewModel.selectedAnswers[qIndex] = answer
                                         viewModel.saveAnswers()
-                                    }) {
+                                    }, label: {
                                         Text(answer)
                                             .padding(.horizontal, 12)
                                             .padding(.vertical, 10)
@@ -53,7 +53,7 @@ struct UserPreferenceView: View {
                                             )
                                             .clipShape(Capsule())
                                             .shadow(color: .black.opacity(0.05), radius: 3, x: 0, y: 2)
-                                    }
+                                    })
                                 }
                             }
                         }

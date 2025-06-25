@@ -47,4 +47,3 @@ struct AnimeListView: View {
         .navigationTitle("Anime List")
     }
 }
-
