@@ -18,6 +18,7 @@ struct AniCueApp: App {
                 .environmentObject(userPreferences)
                 .environmentObject(favorites)
                 .environmentObject(watched)
+                .accentColor(.teal)
         }
     }
 }

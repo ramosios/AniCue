@@ -25,7 +25,6 @@ struct AnimeRowView: View {
                              anime.images?["webp"]?.imageUrl ??
                              anime.images?["webp"]?.largeImageUrl
 
-        // Append a cache-busting UUID to force reload
         let cacheBustingURL = imageURLString.flatMap { "\($0)?v=\(UUID().uuidString)" }
 
         return Group {
@@ -40,7 +39,7 @@ struct AnimeRowView: View {
                         Color.gray.opacity(0.3)
                     }
                 }
-                .id(anime.malId) // Force SwiftUI to treat the image as a new view when ID changes
+                .id(anime.malId)
             } else {
                 Color.gray.opacity(0.3)
             }
@@ -61,28 +60,28 @@ struct AnimeRowView: View {
                 if let score = anime.score {
                     Label("\(String(format: "%.1f", score))", systemImage: "star.fill")
                         .font(.subheadline)
-                        .foregroundColor(.yellow)
+                        .foregroundColor(.teal)
                 }
 
                 if let episodes = anime.episodes {
                     Label("\(episodes)", systemImage: "play.rectangle")
                         .font(.subheadline)
-                        .foregroundColor(.secondary)
+                        .foregroundColor(.teal)
                 }
             }
 
             if let source = anime.source {
                 Label(source, systemImage: "sparkles")
                     .font(.subheadline)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.teal)
             }
 
             HStack(spacing: 14) {
                 Button(action: onToggleFavorite) {
                     Image(systemName: isFavorite ? "heart.fill" : "heart")
-                        .foregroundColor(isFavorite ? .red : .gray)
+                        .foregroundColor(.teal)
                         .padding(6)
-                        .background(Circle().fill(isFavorite ? Color.red.opacity(0.15) : Color.gray.opacity(0.15)))
+                        .background(Circle().fill(Color.teal.opacity(0.15)))
                 }
 
                 Button(action: onMarkWatched) {
@@ -93,7 +92,7 @@ struct AnimeRowView: View {
                     .font(.caption.weight(.medium))
                     .padding(.horizontal, 12)
                     .padding(.vertical, 6)
-                    .background(isWatched ? Color.green.opacity(0.8) : Color.blue.opacity(0.8))
+                    .background(Color.teal)
                     .foregroundColor(.white)
                     .cornerRadius(12)
                 }
