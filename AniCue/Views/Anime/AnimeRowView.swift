@@ -7,6 +7,8 @@ struct AnimeRowView: View {
     let onToggleFavorite: () -> Void
     let onMarkWatched: () -> Void
 
+    @StateObject private var imageLoader = ImageLoader()
+
     var body: some View {
         HStack(alignment: .top, spacing: 16) {
             animeImage
@@ -17,29 +19,20 @@ struct AnimeRowView: View {
         .background(Color(.secondarySystemBackground))
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
+        .onAppear {
+            if let urlString = anime.images?["jpg"]?.imageUrl ?? anime.images?["webp"]?.imageUrl,
+               let url = URL(string: urlString) {
+                imageLoader.load(from: url)
+            }
+        }
     }
 
     private var animeImage: some View {
-        let imageURLString = anime.images?["jpg"]?.imageUrl ??
-                             anime.images?["jpg"]?.largeImageUrl ??
-                             anime.images?["webp"]?.imageUrl ??
-                             anime.images?["webp"]?.largeImageUrl
-
-        let cacheBustingURL = imageURLString.flatMap { "\($0)?v=\(UUID().uuidString)" }
-
-        return Group {
-            if let urlString = cacheBustingURL, let url = URL(string: urlString) {
-                AsyncImage(url: url) { phase in
-                    switch phase {
-                    case .success(let image):
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    default:
-                        Color.gray.opacity(0.3)
-                    }
-                }
-                .id(anime.malId)
+        Group {
+            if let image = imageLoader.image {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
             } else {
                 Color.gray.opacity(0.3)
             }

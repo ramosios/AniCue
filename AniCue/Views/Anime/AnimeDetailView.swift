@@ -5,9 +5,10 @@ struct AnimeDetailView: View {
 
     var body: some View {
         ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                if let imageUrlString = anime.images?["jpg"]?.largeImageUrl,
-                   let url = URL(string: imageUrlString) {
+            VStack(spacing: 24) {
+
+                // Image
+                if let url = anime.images?["jpg"]?.largeImageUrl.flatMap(URL.init(string:)) {
                     AsyncImage(url: url) { phase in
                         switch phase {
                         case .empty:
@@ -15,13 +16,14 @@ struct AnimeDetailView: View {
                         case .success(let image):
                             image
                                 .resizable()
-                                .scaledToFit()
-                                .cornerRadius(12)
+                                .aspectRatio(contentMode: .fit)
+                                .frame(maxWidth: .infinity)
+                                .cornerRadius(16)
                         case .failure:
                             Image(systemName: "photo")
                                 .resizable()
                                 .scaledToFit()
-                                .frame(height: 200)
+                                .frame(height: 220)
                                 .foregroundColor(.gray)
                         @unknown default:
                             EmptyView()
@@ -29,56 +31,75 @@ struct AnimeDetailView: View {
                     }
                 }
 
-                Text(anime.title)
-                    .font(.title)
-                    .bold()
-
-                if let titleJapanese = anime.titleJapanese, !titleJapanese.isEmpty {
-                    Text("Japanese: \(titleJapanese)")
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
+                // Title and Synopsis
+                VStack(alignment: .leading, spacing: 12) {
+                    Text(anime.title)
+                        .font(.system(.title2, design: .rounded).bold())
+                    if let titleJapanese = anime.titleJapanese {
+                        Text(titleJapanese)
+                            .font(.system(.subheadline, design: .rounded))
+                            .foregroundColor(.secondary)
+                    }
+                    if let synopsis = anime.synopsis {
+                        Text(synopsis)
+                            .font(.system(.body, design: .rounded))
+                    }
                 }
 
-                if let synopsis = anime.synopsis, !synopsis.isEmpty {
-                    Text(synopsis)
-                        .font(.body)
-                }
-
-                Group {
+                // Stats
+                HStack(spacing: 20) {
                     if let score = anime.score {
-                        Text("Score: \(String(format: "%.2f", score))")
+                        Label(String(format: "%.1f", score), systemImage: "star.fill")
+                            .foregroundColor(.accentColor)
                     }
                     if let rank = anime.rank {
-                        Text("Rank: #\(rank)")
+                        Text("Rank #\(rank)")
+                            .font(.system(.subheadline, design: .rounded))
+                            .foregroundColor(.secondary)
                     }
                     if let popularity = anime.popularity {
-                        Text("Popularity: #\(popularity)")
-                    }
-                    if let episodes = anime.episodes {
-                        Text("Episodes: \(episodes)")
-                    }
-                    if let duration = anime.duration, !duration.isEmpty {
-                        Text("Duration: \(duration)")
-                    }
-                    if let status = anime.status, !status.isEmpty {
-                        Text("Status: \(status)")
+                        Text("Pop. #\(popularity)")
+                            .font(.system(.subheadline, design: .rounded))
+                            .foregroundColor(.secondary)
                     }
                 }
-                .font(.callout)
-                .foregroundColor(.gray)
 
+                // Info Grid
+                VStack(spacing: 10) {
+                    DetailRow(label: "Episodes", value: anime.episodes?.description)
+                    DetailRow(label: "Status", value: anime.status)
+                    DetailRow(label: "Duration", value: anime.duration)
+                    DetailRow(label: "Type", value: anime.type)
+                    DetailRow(label: "Source", value: anime.source)
+                    DetailRow(label: "Aired", value: anime.aired?.string)
+                    DetailRow(label: "Studios", value: anime.studios?.map(\.name).joined(separator: ", "))
+                }
+
+                // Genres/Themes
                 if let genres = anime.genres, !genres.isEmpty {
-                    Text("Genres: \(genres.map(\.name).joined(separator: ", "))")
+                    TagSection(title: "Genres", tags: genres.map(\.name))
+                }
+                if let themes = anime.themes, !themes.isEmpty {
+                    TagSection(title: "Themes", tags: themes.map(\.name))
                 }
 
+                // Trailer
+                if let trailerUrl = anime.trailer?.url, let url = URL(string: trailerUrl) {
+                    Link("▶︎ Watch Trailer", destination: url)
+                        .font(.headline)
+                        .foregroundColor(.accentColor)
+                        .padding(.top)
+                }
+
+                // Streaming
                 if let streaming = anime.streaming, !streaming.isEmpty {
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("Available on:")
-                            .bold()
+                    VStack(alignment: .leading, spacing: 8) {
+                        Text("Available on")
+                            .font(.headline)
                         ForEach(streaming, id: \.url) { platform in
                             if let url = URL(string: platform.url) {
                                 Link(platform.name, destination: url)
-                                    .foregroundColor(.blue)
+                                    .foregroundColor(.accentColor)
                             }
                         }
                     }
@@ -86,7 +107,53 @@ struct AnimeDetailView: View {
             }
             .padding()
         }
+        .background(Color(UIColor.systemGroupedBackground))
         .navigationTitle("Anime Details")
         .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
+struct DetailRow: View {
+    let label: String
+    let value: String?
+
+    var body: some View {
+        if let value = value, !value.isEmpty {
+            HStack {
+                Text(label)
+                    .fontWeight(.semibold)
+                    .font(.system(.body, design: .rounded))
+                Spacer()
+                Text(value)
+                    .foregroundColor(.secondary)
+                    .font(.system(.body, design: .rounded))
+            }
+        }
+    }
+}
+
+struct TagSection: View {
+    let title: String
+    let tags: [String]
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text(title)
+                .font(.headline)
+
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 8) {
+                    ForEach(tags, id: \.self) { tag in
+                        Text(tag)
+                            .font(.system(.subheadline, design: .rounded))
+                            .padding(.horizontal, 12)
+                            .padding(.vertical, 6)
+                            .background(Color.accentColor.opacity(0.1))
+                            .foregroundColor(.accentColor)
+                            .clipShape(Capsule())
+                    }
+                }
+            }
+        }
     }
 }
