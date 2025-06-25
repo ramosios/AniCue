@@ -11,9 +11,17 @@ class DiscoverViewModel: ObservableObject {
     @Published var animes: [JikanAnime] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
-    private let openAIService = OpenAIService()
-    private let jikaService = JikanService()
-    func getRecommendations(for prompt: String, userPreferences: [String],avoiding animesToAvoid: [JikanAnime]) async {
+
+    private let openAIService: OpenAIServiceProtocol
+    private let jikaService: JikanServiceProtocol
+
+    init(openAIService: OpenAIServiceProtocol = OpenAIService(),
+         jikaService: JikanServiceProtocol = JikanService()) {
+        self.openAIService = openAIService
+        self.jikaService = jikaService
+    }
+
+    func getRecommendations(for prompt: String, userPreferences: [String], avoiding animesToAvoid: [JikanAnime]) async {
         isLoading = true
         errorMessage = nil
         animes = []

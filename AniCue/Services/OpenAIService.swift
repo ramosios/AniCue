@@ -64,3 +64,4 @@ struct OpenAIService {
         return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(avoidText)."
     }
 }
+extension OpenAIService: OpenAIServiceProtocol {}
