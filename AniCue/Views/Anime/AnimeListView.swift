@@ -3,7 +3,17 @@ import SwiftUI
 struct AnimeListView: View {
     @EnvironmentObject var favorites: WatchListViewModel
     @EnvironmentObject var watched: WatchedViewModel
+
     let animes: [JikanAnime]
+    let source: AnimeListSource
+
+    var title: String {
+        switch source {
+        case .watchlist: return "Watchlist"
+        case .watched: return "Watched"
+        case .discover: return ""
+        }
+    }
 
     var body: some View {
         ScrollView {
@@ -44,6 +54,11 @@ struct AnimeListView: View {
             }
             .padding()
         }
-        .navigationTitle("Anime List")
+        .navigationTitle(title)
     }
+}
+enum AnimeListSource {
+    case watchlist
+    case watched
+    case discover
 }

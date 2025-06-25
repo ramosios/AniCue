@@ -26,7 +26,7 @@ struct WatchedAnimeView: View {
                     .padding()
                     .multilineTextAlignment(.center)
                 } else {
-                    AnimeListView(animes: watched.animes)
+                    AnimeListView(animes: watched.animes, source: .watched)
                 }
             }
             .navigationTitle("Watched")

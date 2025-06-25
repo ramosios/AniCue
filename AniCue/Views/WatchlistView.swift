@@ -26,7 +26,7 @@ struct WatchlistView: View {
                     .padding()
                     .multilineTextAlignment(.center)
                 } else {
-                    AnimeListView(animes: watchList.animes)
+                    AnimeListView(animes: watchList.animes, source: .watchlist)
                 }
             }
             .navigationTitle("Watchlist")

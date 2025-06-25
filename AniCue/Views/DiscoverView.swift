@@ -35,7 +35,7 @@ struct DiscoverView: View {
                         LoadingView()
                             .padding(.top, 40)
                     } else {
-                        AnimeListView(animes: viewModel.animes)
+                        AnimeListView(animes: viewModel.animes, source: .discover)
                     }
                 }
                 .padding(.vertical)
