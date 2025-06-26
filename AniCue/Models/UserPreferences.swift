@@ -11,11 +11,14 @@ struct UserPreferences: Codable {
 }
 
 func formatPreferences(_ preferences: [String]) -> String {
-    let transformed = preferences.enumerated().compactMap { index, value in
+    let transformed: [String] = preferences.enumerated().compactMap { index, i in
+        let value = i.lowercased()
+        guard value != "no preference" else { return nil }
+
         switch index {
-        case 0: return "I like \(value.lowercased()) animes"
-        case 1: return "I usually watch animes \(value.lowercased())"
-        case 2: return "I prefer \(value.lowercased())"
+        case 0: return "I like \(value) animes"
+        case 1: return "I usually watch animes \(value)"
+        case 2: return "I prefer \(value)"
         default: return nil
         }
     }

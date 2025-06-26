@@ -31,7 +31,7 @@ struct OpenAIService {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
-            "model": "gpt-3.5-turbo",
+            "model": "gpt-4o",
             "messages": [["role": "user", "content": fullPrompt]],
             "temperature": 0.7
         ]
@@ -55,13 +55,16 @@ struct OpenAIService {
             .filter { !$0.isEmpty }
     }
     func buildAnimePrompt(from prompt: String, userPreferences: [String], animesToAvoid: [JikanAnime]) -> String {
+        let rule1 = "Rule 1 : If user mentions a genre on the prompt only recommend animes from that genre"
+        let rule2 = "Rule 2: You can only return 3 anime recommendations but you can have a prelimanary list of 6 and then choose from that the top 3 based on user preferences"
+        let rule = rule1 + "\n" + rule2
         let preferenceText = formatPreferences(userPreferences)
         let avoidList = animesToAvoid.map(\.title).filter { !$0.isEmpty }
         let avoidText = avoidList.isEmpty ? "" :
             "\nAvoid these movies as they've already been watched or added to my watchlist: " +
             avoidList.prefix(30).joined(separator: ", ")
 
-        return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(avoidText)."
+        return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(avoidText)\(rule)."
     }
 }
 extension OpenAIService: OpenAIServiceProtocol {}
