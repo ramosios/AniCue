@@ -17,7 +17,7 @@ func formatPreferences(_ preferences: [String]) -> String {
 
         switch index {
         case 0: return "I like \(value) animes"
-        case 1: return "I usually watch animes \(value)"
+        case 1: return nil
         case 2: return "I prefer \(value)"
         default: return nil
         }
@@ -25,4 +25,14 @@ func formatPreferences(_ preferences: [String]) -> String {
 
     return transformed.isEmpty ? "" :
         "\nTake into account these preferences: " + transformed.joined(separator: ", ") + "."
+}
+
+func preferenceIntensity(from answers: [String]) -> Double {
+    guard answers.indices.contains(1) else { return 0.7}
+    switch answers[1].lowercased() {
+    case "objective": return 0.3
+    case "moderate": return 0.7
+    case "wild": return 0.9
+    default: return 0.7
+    }
 }

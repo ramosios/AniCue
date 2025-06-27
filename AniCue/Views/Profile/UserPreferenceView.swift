@@ -5,13 +5,13 @@ struct UserPreferenceView: View {
 
     private let questions = [
         ("Preferred anime length?", "clock"),
-        ("Do you prefer new or old anime?", "calendar"),
+        ("What type of recommendations are you interested in?", "calendar"),
         ("What type of anime do you enjoy?", "star")
     ]
 
     private let options: [[String]] = [
         ["11–13 episodes", "25–50 episodes", "50+ episodes", "No preference"],
-        ["New", "Old", "No preference"],
+        ["Objective", "Moderate", "Wild"],
         ["Popular", "Niche", "Obscure", "No preference"]
     ]
 

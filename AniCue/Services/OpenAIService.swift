@@ -33,7 +33,7 @@ struct OpenAIService {
         let body: [String: Any] = [
             "model": "gpt-4o",
             "messages": [["role": "user", "content": fullPrompt]],
-            "temperature": 0.7
+            "temperature": preferenceIntensity(from: userPreferences)
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
