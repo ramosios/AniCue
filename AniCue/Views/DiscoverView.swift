@@ -21,7 +21,7 @@ struct DiscoverView: View {
                     PromptInputView(prompt: $prompt) {
                         Task {
                             let avoid = favorites.animes + watched.animes
-                            let preferences = userPreferences.selectedAnswers
+                            let preferences = preferenceDates(from: userPreferences.selectedAnswers)
                             await viewModel.getRecommendations(for: prompt, userPreferences: preferences, avoiding: avoid.map(\.malId))
                         }
                     }

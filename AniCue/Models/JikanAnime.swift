@@ -6,6 +6,32 @@ struct JikanAnimeResponse: Codable {
 
 struct JikanAnimeListResponse: Codable {
     let data: [JikanAnime]
+    let pagination: JikanPagination?
+}
+
+struct JikanPagination: Codable {
+    let lastVisiblePage: Int?
+    let hasNextPage: Bool?
+    let currentPage: Int?
+    let items: JikanItems?
+
+    enum CodingKeys: String, CodingKey {
+        case lastVisiblePage = "last_visible_page"
+        case hasNextPage = "has_next_page"
+        case currentPage = "current_page"
+        case items
+    }
+}
+
+struct JikanItems: Codable {
+    let count: Int?
+    let total: Int?
+    let perPage: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case count, total
+        case perPage = "per_page"
+    }
 }
 
 struct JikanAnime: Codable {
@@ -24,7 +50,7 @@ struct JikanAnime: Codable {
     let popularity: Int?
     let members: Int?
     let favorites: Int?
-    let images: [String: JikanImage]?
+    let images: JikanImageFormats?
     let trailer: JikanTrailer?
     let aired: AiredPeriod?
     let studios: [JikanEntity]?
@@ -48,17 +74,20 @@ struct JikanAnime: Codable {
     }
 }
 
+struct JikanImageFormats: Codable {
+    let jpg: JikanImage?
+    let webp: JikanWebPImage?
+}
+
 struct JikanImage: Codable {
     let imageUrl: String?
     let largeImageUrl: String?
     let smallImageUrl: String?
-    let webp: JikanWebPImage?
 
     enum CodingKeys: String, CodingKey {
         case imageUrl = "image_url"
         case largeImageUrl = "large_image_url"
         case smallImageUrl = "small_image_url"
-        case webp
     }
 }
 
@@ -124,4 +153,7 @@ struct JikanBroadcast: Codable {
 struct JikanStreaming: Codable {
     let name: String
     let url: String
+}
+extension JikanAnime: Identifiable {
+    var id: Int { malId }
 }

@@ -20,7 +20,7 @@ struct AnimeRowView: View {
         .cornerRadius(20)
         .shadow(color: .black.opacity(0.05), radius: 4, x: 0, y: 2)
         .onAppear {
-            if let urlString = anime.images?["jpg"]?.imageUrl ?? anime.images?["webp"]?.imageUrl,
+            if let urlString = anime.images?.jpg?.imageUrl ?? anime.images?.webp?.imageUrl,
                let url = URL(string: urlString) {
                 imageLoader.load(from: url)
             }

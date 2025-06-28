@@ -46,7 +46,6 @@ func preferenceDates(from answers: [String]) -> (startDate: String?, endDate: St
     }
 }
 
-
 func preferenceIntensity(from answers: [String]) -> Double {
     guard answers.indices.contains(1) else { return 0.7}
     switch answers[1].lowercased() {

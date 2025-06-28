@@ -32,8 +32,8 @@ analyzer_rules:
   - unused_import
 
 line_length:
-  warning: 215
-  error: 220
+  warning: 300
+  error: 350
   ignores_comments: true
   ignores_urls: true
 

@@ -8,8 +8,9 @@ struct AnimeDetailView: View {
             VStack(spacing: 24) {
 
                 // Image
-                if let url = anime.images?["jpg"]?.largeImageUrl.flatMap(URL.init(string:)) {
-                    AsyncImage(url: url) { phase in
+                if let url = anime.images?.jpg?.largeImageUrl ?? anime.images?.webp?.largeImageUrl,
+                   let imageUrl = URL(string: url) {
+                    AsyncImage(url: imageUrl) { phase in
                         switch phase {
                         case .empty:
                             ProgressView()
@@ -157,3 +158,4 @@ struct TagSection: View {
         }
     }
 }
+
