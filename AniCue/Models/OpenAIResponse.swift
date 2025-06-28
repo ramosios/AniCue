@@ -32,3 +32,7 @@ enum OpenAIError: Error, LocalizedError , Equatable {
         }
     }
 }
+enum OpenAIModel: String {
+    case gpt3_5 = "gpt-3.5-turbo"
+    case gpt4 = "gpt-4o"
+}
