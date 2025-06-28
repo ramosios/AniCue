@@ -7,7 +7,7 @@
 import Foundation
 
 protocol OpenAIServiceProtocol {
-    func fetchAnimeTitles(prompt: String, userPreferences: [String], excluding moviesToAvoid: [JikanAnime]) async throws -> [String]
+    func fetchAnimeTitles(prompt: String, userPreferences: [String], excluding moviesToAvoid: [Int]) async throws -> [String]
 }
 
 protocol JikanServiceProtocol {

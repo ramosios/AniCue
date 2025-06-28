@@ -21,7 +21,7 @@ class DiscoverViewModel: ObservableObject {
         self.jikaService = jikaService
     }
 
-    func getRecommendations(for prompt: String, userPreferences: [String], avoiding animesToAvoid: [JikanAnime]) async {
+    func getRecommendations(for prompt: String, userPreferences: [String], avoiding animesToAvoid: [Int]) async {
         isLoading = true
         errorMessage = nil
         animes = []

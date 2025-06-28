@@ -16,7 +16,7 @@ struct OpenAIService {
         self.session = session
     }
 
-    func fetchAnimeTitles(prompt: String, userPreferences: [String], excluding animesToAvoid: [JikanAnime]) async throws -> [String] {
+    func fetchAnimeTitles(prompt: String, userPreferences: [String], excluding animesToAvoid: [Int]) async throws -> [String] {
         guard !apiKey.isEmpty else {
             throw OpenAIError.missingAPIKey
         }
@@ -54,17 +54,13 @@ struct OpenAIService {
             .compactMap { $0.components(separatedBy: ". ").last }
             .filter { !$0.isEmpty }
     }
-    func buildAnimePrompt(from prompt: String, userPreferences: [String], animesToAvoid: [JikanAnime]) -> String {
+    func buildAnimePrompt(from prompt: String, userPreferences: [String], animesToAvoid: [Int]) -> String {
         let rule1 = "Rule 1 : If user mentions a genre on the prompt only recommend animes from that genre"
         let rule2 = "Rule 2: You can only return 3 anime recommendations but you can have a prelimanary list of 6 and then choose from that the top 3 based on user preferences"
         let rule = rule1 + "\n" + rule2
         let preferenceText = formatPreferences(userPreferences)
-        let avoidList = animesToAvoid.map(\.title).filter { !$0.isEmpty }
-        let avoidText = avoidList.isEmpty ? "" :
-            "\nAvoid these movies as they've already been watched or added to my watchlist: " +
-            avoidList.prefix(30).joined(separator: ", ")
 
-        return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(avoidText)\(rule)."
+        return "Recommend up to 3 anime for the following prompt just give anime title: \(prompt).\n\(preferenceText)\(rule)."
     }
 }
 extension OpenAIService: OpenAIServiceProtocol {}

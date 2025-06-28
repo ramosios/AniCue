@@ -22,7 +22,7 @@ struct DiscoverView: View {
                         Task {
                             let avoid = favorites.animes + watched.animes
                             let preferences = userPreferences.selectedAnswers
-                            await viewModel.getRecommendations(for: prompt, userPreferences: preferences, avoiding: avoid)
+                            await viewModel.getRecommendations(for: prompt, userPreferences: preferences, avoiding: avoid.map(\.malId))
                         }
                     }
 
