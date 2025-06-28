@@ -4,13 +4,13 @@ struct UserPreferenceView: View {
     @EnvironmentObject var viewModel: UserPreferencesViewModel
 
     private let questions = [
-        ("Preferred anime length?", "clock"),
+        ("Preferred anime release date?", "clock"),
         ("What type of recommendations are you interested in?", "calendar"),
         ("What type of anime do you enjoy?", "star")
     ]
 
     private let options: [[String]] = [
-        ["11–13 episodes", "25–50 episodes", "50+ episodes", "No preference"],
+        ["Recent", "2022-2010", "2000s", "1990s"],
         ["Objective", "Moderate", "Wild"],
         ["Popular", "Niche", "Obscure", "No preference"]
     ]
