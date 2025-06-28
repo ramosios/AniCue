@@ -14,22 +14,6 @@ struct JikanService {
         self.session = session
     }
 
-    func fetchAnime(by id: Int) async throws -> JikanAnime {
-        let urlString = "\(baseURL)/anime/\(id)"
-        guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
-
-        let (data, response) = try await session.data(from: url)
-        guard let httpResp = response as? HTTPURLResponse, (200...299).contains(httpResp.statusCode) else {
-            throw JikanAPIError.requestFailed
-        }
-
-        do {
-            let decoded = try JSONDecoder().decode(JikanAnimeResponse.self, from: data)
-            return decoded.data
-        } catch {
-            throw JikanAPIError.decodingFailed
-        }
-    }
     func fetchFilteredAnime(
         genreIds: [Int],
         excludedMalIds: [Int] = [],
