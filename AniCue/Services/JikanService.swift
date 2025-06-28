@@ -36,7 +36,8 @@ struct JikanService {
         startDate: String,
         endDate: String,
         limit: Int = 25,
-        page: Int = 2
+        page: Int = 1,
+        minimumScore: Double = 7.0
     ) async throws -> [JikanAnime] {
         let genreQuery = genreIds.map(String.init).joined(separator: ",")
         let urlString = "\(baseURL)/anime?start_date=\(startDate)&end_date=\(endDate)&genres=\(genreQuery)&order_by=score&sort=desc&limit=\(limit)&page=\(page)"
@@ -49,7 +50,10 @@ struct JikanService {
 
         do {
             let decoded = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
-            return decoded.data.filter { !excludedMalIds.contains($0.malId) }
+            return decoded.data.filter {
+                !excludedMalIds.contains($0.malId) &&
+                ($0.score ?? 0) >= minimumScore
+            }
         } catch {
             throw JikanAPIError.decodingFailed
         }
