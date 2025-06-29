@@ -22,27 +22,37 @@ struct PromptInputView: View {
                     .foregroundColor(.primary)
             }
 
-            TextEditor(text: $prompt)
-                .frame(height: 100)
-                .padding(12)
-                .background(Color(.systemGray6))
-                .cornerRadius(14)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 14)
-                        .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
-                )
-                .overlay(
-                    Group {
-                        if prompt.isEmpty {
-                            Text("e.g. dark psychological thrillers with mystery")
-                                .foregroundColor(.gray)
-                                .padding(.horizontal, 18)
-                                .padding(.vertical, 14)
-                                .allowsHitTesting(false)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
+            TextEditor(text: Binding(
+                get: { prompt },
+                set: { newValue in
+                    prompt = String(newValue.prefix(200))
+                }
+            ))
+            .frame(height: 100)
+            .padding(12)
+            .background(Color(.systemGray6))
+            .cornerRadius(14)
+            .overlay(
+                RoundedRectangle(cornerRadius: 14)
+                    .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
+            )
+            .overlay(
+                Group {
+                    if prompt.isEmpty {
+                        Text("e.g. dark psychological thrillers with mystery")
+                            .foregroundColor(.gray)
+                            .padding(.horizontal, 18)
+                            .padding(.vertical, 14)
+                            .allowsHitTesting(false)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                )
+                }
+            )
+
+            Text("\(300 - prompt.count) characters remaining")
+                .font(.caption)
+                .foregroundColor(.gray)
+                .frame(maxWidth: .infinity, alignment: .trailing)
 
             Button(action: {
                 guard !prompt.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
