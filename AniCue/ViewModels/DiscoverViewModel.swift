@@ -24,7 +24,7 @@ class DiscoverViewModel: ObservableObject {
         animes = []
 
         let start = userPreferences.startDate ?? "2000-01-01"
-        let end = userPreferences.endDate ?? "2024-12-31"
+        let end = userPreferences.endDate ?? "2023-12-31"
 
         do {
             let genres: [Int]

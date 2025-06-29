@@ -19,9 +19,9 @@ struct JikanService {
         excludedMalIds: [Int] = [],
         startDate: String,
         endDate: String,
-        limit: Int = 25,
-        page: Int = 1,
-        minimumScore: Double = 7.0
+        limit: Int ,
+        page: Int ,
+        minimumScore: Double
     ) async throws -> [JikanAnime] {
         let genreQuery = genreIds.map(String.init).joined(separator: ",")
         let urlString = "\(baseURL)/anime?start_date=\(startDate)&end_date=\(endDate)&genres=\(genreQuery)&order_by=score&sort=desc&limit=\(limit)&page=\(page)"
