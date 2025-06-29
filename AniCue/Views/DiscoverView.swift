@@ -41,7 +41,6 @@ struct DiscoverView: View {
                 .padding(.vertical)
             }
             .background(Color(.systemGroupedBackground))
-            .navigationTitle("Discover")
             .navigationBarTitleDisplayMode(.inline)
         }
     }
