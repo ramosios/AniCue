@@ -18,13 +18,14 @@ class DiscoverViewModel: ObservableObject {
         self.openAIService = openAIService
         self.jikaService = jikaService
     }
-    func getRecommendations(for prompt: String, userPreferences: (startDate: String?, endDate: String?), avoiding animesToAvoid: [Int]) async {
+    func getRecommendations(for prompt: String, userPreferences: (startDate: String?, endDate: String?,format: String?,popularity: String?), avoiding animesToAvoid: [Int]) async {
         isLoading = true
         errorMessage = nil
         animes = []
 
         let start = userPreferences.startDate ?? "2000-01-01"
         let end = userPreferences.endDate ?? "2023-12-31"
+        let format = userPreferences.format ?? ""
 
         do {
             let genres: [Int]
@@ -43,7 +44,8 @@ class DiscoverViewModel: ObservableObject {
                     endDate: end,
                     limit: 25,
                     page: 1,
-                    minimumScore: 7.0
+                    minimumScore: 7.0,
+                    type: format
                 )
             } catch {
                 throw NSError(domain: "Anime Fetch Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to fetch filtered anime: \(error.localizedDescription)"])

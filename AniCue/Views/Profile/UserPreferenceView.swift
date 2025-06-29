@@ -5,13 +5,13 @@ struct UserPreferenceView: View {
 
     private let questions = [
         ("Which release period are you looking for in anime?", "calendar"),
-        ("What format of anime are you interested in?", "magnifyingglass"),
+        ("Should Movies and OVAs be included in your results?", "magnifyingglass"),
         ("What type of anime are you looking to explore?", "star")
     ]
 
     private let options: [[String]] = [
-        ["Recent", "2022-2010", "2000s", "1990s"],
-        ["TV Series", "Movies", "No preference"],
+        ["Recent", "2022-2010", "2000s", "1990s or earlier", "No preference"],
+        ["Yes", "No"],
         ["Popular Hits", "Hidden Gems", "Niche", "No preference"]
     ]
 

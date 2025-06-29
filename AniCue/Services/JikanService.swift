@@ -19,12 +19,17 @@ struct JikanService {
         excludedMalIds: [Int] = [],
         startDate: String,
         endDate: String,
-        limit: Int ,
-        page: Int ,
-        minimumScore: Double
+        limit: Int,
+        page: Int,
+        minimumScore: Double,
+        type: String?
     ) async throws -> [JikanAnime] {
         let genreQuery = genreIds.map(String.init).joined(separator: ",")
-        let urlString = "\(baseURL)/anime?start_date=\(startDate)&end_date=\(endDate)&genres=\(genreQuery)&order_by=score&sort=desc&limit=\(limit)&page=\(page)"
+        var urlString = "\(baseURL)/anime?start_date=\(startDate)&end_date=\(endDate)&genres=\(genreQuery)&order_by=score&sort=desc&limit=\(limit)&page=\(page)"
+        if let type = type, ["tv", "movie"].contains(type.lowercased()) {
+            urlString += "&type=\(type.capitalized)"
+        }
+
         guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
 
         let (data, response) = try await session.data(from: url)

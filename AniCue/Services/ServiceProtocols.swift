@@ -19,6 +19,7 @@ protocol JikanServiceProtocol {
             endDate: String,
             limit: Int,
             page: Int,
-            minimumScore: Double
+            minimumScore: Double,
+            type: String?
         ) async throws -> [JikanAnime]
 }
