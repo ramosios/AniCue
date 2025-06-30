@@ -93,23 +93,31 @@ struct AxolotlHead: View {
     var accentColor: Color = Color(red: 0.5, green: 0.8, blue: 1.0)
     var body: some View {
         ZStack {
-            // 2 Antennae on the left
+            // 3 Antennae on the left
+            AxolotlAntenna(angle: -70, color: accentColor)
+                .offset(x: -58, y: -38)
+                .rotationEffect(.degrees(isThinking ? -17 : 0))
+                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             AxolotlAntenna(angle: -55, color: accentColor)
                 .offset(x: -48, y: -48)
-                .rotationEffect(.degrees(isThinking ? -10 : 0))
+                .rotationEffect(.degrees(isThinking ? -12 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             AxolotlAntenna(angle: -25, color: accentColor)
                 .offset(x: -28, y: -54)
-                .rotationEffect(.degrees(isThinking ? -5 : 0))
+                .rotationEffect(.degrees(isThinking ? -7 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            // 2 Antennae on the right
+            // 3 Antennae on the right
             AxolotlAntenna(angle: 25, color: accentColor)
                 .offset(x: 28, y: -54)
-                .rotationEffect(.degrees(isThinking ? 5 : 0))
+                .rotationEffect(.degrees(isThinking ? 7 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             AxolotlAntenna(angle: 55, color: accentColor)
                 .offset(x: 48, y: -48)
-                .rotationEffect(.degrees(isThinking ? 10 : 0))
+                .rotationEffect(.degrees(isThinking ? 12 : 0))
+                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
+            AxolotlAntenna(angle: 70, color: accentColor)
+                .offset(x: 58, y: -38)
+                .rotationEffect(.degrees(isThinking ? 17 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             // Head shape with gradient
             RoundedRectangle(cornerRadius: 40)
