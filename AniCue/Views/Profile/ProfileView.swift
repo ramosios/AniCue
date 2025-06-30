@@ -30,92 +30,16 @@ struct ProfileView: View {
             ZStack {
                 ScrollView {
                     VStack(spacing: 32) {
-                        VStack(spacing: 16) {
-                            // Centered profile image
-                            PhotosPicker(
-                                selection: $selectedItem,
-                                matching: .images,
-                                photoLibrary: .shared()
-                            ) {
-                                if let image = profileImage {
-                                    Image(uiImage: image)
-                                        .resizable()
-                                        .scaledToFill()
-                                        .frame(width: 96, height: 96)
-                                        .clipShape(Circle())
-                                } else {
-                                    Image(systemName: "person.crop.circle.fill")
-                                        .resizable()
-                                        .frame(width: 96, height: 96)
-                                        .foregroundColor(.accentColor)
-                                }
-                            }
-                            .onChange(of: selectedItem) { _, newItem in
-                                if let newItem {
-                                    Task {
-                                        if let data = try? await newItem.loadTransferable(type: Data.self),
-                                           let uiImage = UIImage(data: data) {
-                                            profileImage = uiImage
-                                            if let imageData = uiImage.jpegData(compressionQuality: 0.8) {
-                                                UserDefaults.standard.set(imageData, forKey: profileImageKey)
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-
-                            // Name and edit/check button overlayed for symmetry
-                            ZStack(alignment: .trailing) {
-                                if isEditingName {
-                                    TextField("Enter your name", text: $tempUserName)
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .multilineTextAlignment(.center)
-                                        .textFieldStyle(.roundedBorder)
-                                        .frame(width: 200)
-                                        .onChange(of: tempUserName) { _, newValue in
-                                            if newValue.count > 10 {
-                                                tempUserName = String(newValue.prefix(10))
-                                            }
-                                        }
-                                    Button {
-                                        userName = tempUserName
-                                        UserDefaults.standard.set(userName, forKey: userNameKey)
-                                        isEditingName = false
-                                    } label: {
-                                        Image(systemName: "checkmark.circle.fill")
-                                            .foregroundColor(.accentColor)
-                                            .font(.title2)
-                                    }
-                                    .offset(x: 16)
-                                } else {
-                                    Text(userName)
-                                        .font(.title2)
-                                        .fontWeight(.bold)
-                                        .frame(width: 200)
-                                        .multilineTextAlignment(.center)
-                                    Button {
-                                        tempUserName = userName
-                                        isEditingName = true
-                                    } label: {
-                                        Image(systemName: "pencil.circle.fill")
-                                            .foregroundColor(.accentColor)
-                                            .font(.title2)
-                                    }
-                                    .offset(x: 16)
-                                }
-                            }
-                            .frame(width: 230, alignment: .center)
-
-                            Text("Watched \(watched.animes.count) anime titles")
-                                .font(.subheadline)
-                                .foregroundColor(.secondary)
-                        }
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(.ultraThinMaterial)
-                        .clipShape(RoundedRectangle(cornerRadius: 20))
-                        .shadow(radius: 5)
+                        ProfileHeaderView(
+                            profileImage: $profileImage,
+                            selectedItem: $selectedItem,
+                            userName: $userName,
+                            isEditingName: $isEditingName,
+                            tempUserName: $tempUserName,
+                            watchedCount: watched.animes.count,
+                            userNameKey: userNameKey,
+                            profileImageKey: profileImageKey
+                        )
 
                         VStack(spacing: 16) {
                             ProfileNavigationLink(title: "Watched Anime", icon: "eye.fill") {
