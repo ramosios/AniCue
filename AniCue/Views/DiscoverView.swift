@@ -34,13 +34,19 @@ struct DiscoverView: View {
                     if viewModel.isLoading {
                         UpaniAnimation()
                             .padding(.top, 40)
+                    } else if viewModel.noRecommendations {
+                        Image("UpaniEmptyResults")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(maxWidth: 240)
+                            .padding(.top, 40)
+                            .opacity(0.7)
                     } else {
                         AnimeListView(animes: viewModel.animes, source: .discover)
                     }
                 }
                 .padding(.vertical)
             }
-            .background(Color(.systemGroupedBackground))
             .navigationBarTitleDisplayMode(.inline)
         }
     }

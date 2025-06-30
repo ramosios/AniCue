@@ -11,6 +11,7 @@ class DiscoverViewModel: ObservableObject {
     @Published var animes: [JikanAnime] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var noRecommendations = false
     private let openAIService: OpenAIServiceProtocol
     private let jikaService: JikanServiceProtocol
     init(openAIService: OpenAIServiceProtocol = OpenAIService(),
@@ -22,6 +23,7 @@ class DiscoverViewModel: ObservableObject {
         isLoading = true
         errorMessage = nil
         animes = []
+        noRecommendations = false
 
         let start = userPreferences.startDate ?? "2000-01-01"
         let end = userPreferences.endDate ?? "2023-12-31"
@@ -54,6 +56,7 @@ class DiscoverViewModel: ObservableObject {
             do {
                 let topAnimes = try await openAIService.recommendTopAnime(from: filteredAnimes, prompt: prompt)
                 self.animes = topAnimes
+                self.noRecommendations = topAnimes.isEmpty
             } catch {
                 throw NSError(domain: "Recommendation Error", code: 0, userInfo: [NSLocalizedDescriptionKey: "Failed to get recommendations: \(error.localizedDescription)"])
             }
