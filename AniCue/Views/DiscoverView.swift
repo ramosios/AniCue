@@ -32,7 +32,7 @@ struct DiscoverView: View {
                     }
 
                     if viewModel.isLoading {
-                        AxolotlView()
+                        UpaniAnimation()
                             .padding(.top, 40)
                     } else {
                         AnimeListView(animes: viewModel.animes, source: .discover)

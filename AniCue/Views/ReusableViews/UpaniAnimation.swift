@@ -1,13 +1,18 @@
+//
+//  UpaniAnimation.swift
+//  AniCue
+//
+//  Created by Jorge Ramos on 30/06/25.
+//
 import SwiftUI
 
 // Define main and accent colors for easy modification
 let axolotlMainColor = Color(red: 0.9, green: 0.95, blue: 0.9)
 let axolotlAccentColor = Color(red: 0.4, green: 0.85, blue: 0.9)
 
-struct AxolotlView: View {
+struct UpaniAnimation: View {
     @State private var isThinking = false
     @State private var isBlinking = false
-    @State private var bubbleAnim = false
     var body: some View {
         ZStack {
             // Shadow
@@ -78,10 +83,6 @@ struct AxolotlView: View {
                     withAnimation(.easeInOut(duration: 0.1)) { isBlinking = false }
                 }
             }
-            // Bubbles
-            withAnimation(Animation.linear(duration: 2.5).repeatForever(autoreverses: false)) {
-                bubbleAnim = true
-            }
         }
     }
 }
@@ -140,12 +141,12 @@ struct AxolotlHead: View {
                 .frame(width: 22, height: 18)
                 .offset(x: 36, y: 18)
             // Gills
-            AxolotlGill(angle: -40, color: accentColor)
-            AxolotlGill(angle: -20, color: accentColor)
+            AxolotlGill(angle: -30, color: accentColor)
+            AxolotlGill(angle: -30, color: accentColor)
                 .offset(x: -10)
-            AxolotlGill(angle: 20, color: accentColor)
+            AxolotlGill(angle: 30, color: accentColor)
                 .offset(x: 10)
-            AxolotlGill(angle: 40, color: accentColor)
+            AxolotlGill(angle: 30, color: accentColor)
             // Eyes with highlight
             HStack(spacing: 32) {
                 AxolotlEye(isBlinking: isBlinking)
@@ -316,21 +317,6 @@ struct AxolotlHand: View {
     }
 }
 
-struct BubbleView: View {
-    var offsetX: CGFloat
-    var offsetY: CGFloat
-    var delay: Double
-    @Binding var anim: Bool
-    var body: some View {
-        Circle()
-            .fill(Color.white.opacity(0.5))
-            .frame(width: 16, height: 16)
-            .scaleEffect(anim ? 1.0 : 0.5)
-            .offset(x: offsetX, y: anim ? offsetY - 30 : offsetY)
-            .opacity(anim ? 0.0 : 1.0)
-            .animation(Animation.easeInOut(duration: 2.5).delay(delay).repeatForever(autoreverses: false), value: anim)
-    }
-}
 struct AnimatedLoadingText: View {
     @State private var dots = ""
     let baseText = "Loading"
@@ -359,9 +345,9 @@ struct AnimatedLoadingText: View {
     }
 }
 
-struct AxolotlView_Previews: PreviewProvider {
+struct UpaniAnimation_Previews: PreviewProvider {
     static var previews: some View {
-        AxolotlView()
+        UpaniAnimation()
             .padding()
             .previewLayout(.sizeThatFits)
     }
