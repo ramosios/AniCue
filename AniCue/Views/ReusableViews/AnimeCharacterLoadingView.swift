@@ -11,12 +11,6 @@ struct AxolotlView: View {
                 .fill(Color.black.opacity(0.12))
                 .frame(width: 90, height: 18)
                 .offset(y: 110)
-            // Bubbles
-            Group {
-                BubbleView(offsetX: -60, offsetY: -40, delay: 0.0, anim: $bubbleAnim)
-                BubbleView(offsetX: -40, offsetY: -60, delay: 0.3, anim: $bubbleAnim)
-                BubbleView(offsetX: 50, offsetY: -50, delay: 0.6, anim: $bubbleAnim)
-            }
             // Tail with gradient
             Ellipse()
                 .fill(LinearGradient(
@@ -95,7 +89,11 @@ struct AxolotlHead: View {
     var accentColor: Color = Color(red: 0.5, green: 0.8, blue: 1.0)
     var body: some View {
         ZStack {
-            // 2 Antennae on the left
+            // 3 Antennae on the left
+            AxolotlAntenna(angle: -70, color: accentColor)
+                .offset(x: -58, y: -38)
+                .rotationEffect(.degrees(isThinking ? -15 : 0))
+                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             AxolotlAntenna(angle: -55, color: accentColor)
                 .offset(x: -48, y: -48)
                 .rotationEffect(.degrees(isThinking ? -10 : 0))
@@ -104,7 +102,7 @@ struct AxolotlHead: View {
                 .offset(x: -28, y: -54)
                 .rotationEffect(.degrees(isThinking ? -5 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            // 2 Antennae on the right
+            // 3 Antennae on the right
             AxolotlAntenna(angle: 25, color: accentColor)
                 .offset(x: 28, y: -54)
                 .rotationEffect(.degrees(isThinking ? 5 : 0))
@@ -112,6 +110,10 @@ struct AxolotlHead: View {
             AxolotlAntenna(angle: 55, color: accentColor)
                 .offset(x: 48, y: -48)
                 .rotationEffect(.degrees(isThinking ? 10 : 0))
+                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
+            AxolotlAntenna(angle: 70, color: accentColor)
+                .offset(x: 58, y: -38)
+                .rotationEffect(.degrees(isThinking ? 15 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             // Head shape with gradient
             RoundedRectangle(cornerRadius: 40)
@@ -271,7 +273,7 @@ struct AxolotlEye: View {
 }
 
 struct AxolotlExpressiveMouth: View {
-    var color: Color = .black
+    var color: Color = Color(red: 0.5, green: 0.8, blue: 1.0)
     var body: some View {
         Path { path in
             path.move(to: CGPoint(x: 4, y: 10))
