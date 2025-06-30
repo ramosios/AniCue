@@ -14,14 +14,9 @@ struct WatchlistView: View {
             Group {
                 if watchList.animes.isEmpty {
                     VStack(spacing: 16) {
-                        Image(systemName: "tray")
+                        Image("UpaniWatchlist")
                             .font(.system(size: 40))
                             .foregroundColor(.gray)
-                        Text("Your watchlist is empty.")
-                            .font(.headline)
-                        Text("Add some anime to get started!")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
                     }
                     .padding()
                     .multilineTextAlignment(.center)

@@ -14,14 +14,7 @@ struct WatchedAnimeView: View {
             Group {
                 if watched.animes.isEmpty {
                     VStack(spacing: 16) {
-                        Image(systemName: "eye.slash")
-                            .font(.system(size: 40))
-                            .foregroundColor(.gray)
-                        Text("Your watched list is empty.")
-                            .font(.headline)
-                        Text("Start watching anime to fill this list!")
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
+                        Image("UpaniWatched")
                     }
                     .padding()
                     .multilineTextAlignment(.center)
