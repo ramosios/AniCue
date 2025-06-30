@@ -1,8 +1,8 @@
 import SwiftUI
 
 // Define main and accent colors for easy modification
-let axolotlMainColor = Color(red: 0.8, green: 0.95, blue: 1.0)
-let axolotlAccentColor = Color(red: 0.5, green: 0.8, blue: 1.0)
+let axolotlMainColor = Color(red: 0.9, green: 0.95, blue: 0.9)
+let axolotlAccentColor = Color(red: 0.4, green: 0.85, blue: 0.9)
 
 struct AxolotlView: View {
     @State private var isThinking = false
@@ -119,15 +119,15 @@ struct AxolotlHead: View {
                 .offset(x: 58, y: -38)
                 .rotationEffect(.degrees(isThinking ? 17 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            // Head shape with gradient
-            RoundedRectangle(cornerRadius: 40)
+            // Head shape with oval
+            Ellipse()
                 .fill(LinearGradient(
                     gradient: Gradient(colors: [mainColor, accentColor]),
                     startPoint: .top,
                     endPoint: .bottom))
                 .frame(width: 110, height: 90)
                 .overlay(
-                    RoundedRectangle(cornerRadius: 40)
+                    Ellipse()
                         .stroke(accentColor.opacity(0.25), lineWidth: 3)
                 )
             // Blush
@@ -280,11 +280,12 @@ struct AxolotlExpressiveMouth: View {
     var color: Color = Color(red: 0.5, green: 0.8, blue: 1.0)
     var body: some View {
         Path { path in
-            path.move(to: CGPoint(x: 4, y: 10))
-            path.addLine(to: CGPoint(x: 20, y: 10))
+            // Bigger, slight smile (arc)
+            path.move(to: CGPoint(x: 2, y: 14))
+            path.addQuadCurve(to: CGPoint(x: 22, y: 14), control: CGPoint(x: 12, y: 22))
         }
         .stroke(color, lineWidth: 4)
-        .frame(width: 24, height: 20)
+        .frame(width: 24, height: 24)
     }
 }
 struct AxolotlHand: View {
