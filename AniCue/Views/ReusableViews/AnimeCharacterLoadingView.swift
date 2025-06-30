@@ -1,5 +1,9 @@
 import SwiftUI
 
+// Define main and accent colors for easy modification
+let axolotlMainColor = Color(red: 0.8, green: 0.95, blue: 1.0)
+let axolotlAccentColor = Color(red: 0.5, green: 0.8, blue: 1.0)
+
 struct AxolotlView: View {
     @State private var isThinking = false
     @State private var isBlinking = false
@@ -14,7 +18,7 @@ struct AxolotlView: View {
             // Tail with gradient
             Ellipse()
                 .fill(LinearGradient(
-                    gradient: Gradient(colors: [Color(red: 0.7, green: 0.9, blue: 1.0), Color(red: 0.5, green: 0.8, blue: 1.0)]),
+                    gradient: Gradient(colors: [axolotlAccentColor.opacity(0.7), axolotlAccentColor]),
                     startPoint: .top,
                     endPoint: .bottom))
                 .frame(width: 40, height: 100)
@@ -24,7 +28,7 @@ struct AxolotlView: View {
             // Body with highlight
             Ellipse()
                 .fill(LinearGradient(
-                    gradient: Gradient(colors: [Color(red: 0.8, green: 0.95, blue: 1.0), Color(red: 0.5, green: 0.8, blue: 1.0)]),
+                    gradient: Gradient(colors: [axolotlMainColor, axolotlAccentColor]),
                     startPoint: .topLeading,
                     endPoint: .bottomTrailing))
                 .frame(width: 70, height: 90)
@@ -45,15 +49,15 @@ struct AxolotlView: View {
                 .rotationEffect(.degrees(isThinking ? -4 : 4))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             // Hands
-            AxolotlFin(isLeft: true, color1: Color(red: 0.7, green: 0.9, blue: 1.0), color2: Color(red: 0.5, green: 0.8, blue: 1.0))
+            AxolotlFin(isLeft: true, color1: axolotlAccentColor.opacity(0.7), color2: axolotlAccentColor)
                 .offset(x: -38, y: 90)
                 .rotationEffect(.degrees(isThinking ? -10 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            AxolotlFin(isLeft: false, color1: Color(red: 0.7, green: 0.9, blue: 1.0), color2: Color(red: 0.5, green: 0.8, blue: 1.0))
+            AxolotlFin(isLeft: false, color1: axolotlAccentColor.opacity(0.7), color2: axolotlAccentColor)
                 .offset(x: 38, y: 90)
                 .rotationEffect(.degrees(isThinking ? 10 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            AxolotlHead(isThinking: isThinking, isBlinking: isBlinking, mainColor: Color(red: 0.8, green: 0.95, blue: 1.0), accentColor: Color(red: 0.5, green: 0.8, blue: 1.0))
+            AxolotlHead(isThinking: isThinking, isBlinking: isBlinking, mainColor: axolotlMainColor, accentColor: axolotlAccentColor)
                 .offset(y: 0)
                 .rotationEffect(.degrees(isThinking ? 6 : -6))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
@@ -89,11 +93,7 @@ struct AxolotlHead: View {
     var accentColor: Color = Color(red: 0.5, green: 0.8, blue: 1.0)
     var body: some View {
         ZStack {
-            // 3 Antennae on the left
-            AxolotlAntenna(angle: -70, color: accentColor)
-                .offset(x: -58, y: -38)
-                .rotationEffect(.degrees(isThinking ? -15 : 0))
-                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
+            // 2 Antennae on the left
             AxolotlAntenna(angle: -55, color: accentColor)
                 .offset(x: -48, y: -48)
                 .rotationEffect(.degrees(isThinking ? -10 : 0))
@@ -102,7 +102,7 @@ struct AxolotlHead: View {
                 .offset(x: -28, y: -54)
                 .rotationEffect(.degrees(isThinking ? -5 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            // 3 Antennae on the right
+            // 2 Antennae on the right
             AxolotlAntenna(angle: 25, color: accentColor)
                 .offset(x: 28, y: -54)
                 .rotationEffect(.degrees(isThinking ? 5 : 0))
@@ -110,10 +110,6 @@ struct AxolotlHead: View {
             AxolotlAntenna(angle: 55, color: accentColor)
                 .offset(x: 48, y: -48)
                 .rotationEffect(.degrees(isThinking ? 10 : 0))
-                .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
-            AxolotlAntenna(angle: 70, color: accentColor)
-                .offset(x: 58, y: -38)
-                .rotationEffect(.degrees(isThinking ? 15 : 0))
                 .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isThinking)
             // Head shape with gradient
             RoundedRectangle(cornerRadius: 40)
