@@ -147,6 +147,10 @@ struct ProfileView: View {
                         primaryAction: {
                             favorites.clearAll()
                             watched.clearAll()
+                            UserDefaults.standard.removeObject(forKey: userNameKey)
+                            UserDefaults.standard.removeObject(forKey: profileImageKey)
+                            userName = "AniCue User"
+                            profileImage = nil
                             showingConfirmReset = false
                         },
                         dismiss: {
