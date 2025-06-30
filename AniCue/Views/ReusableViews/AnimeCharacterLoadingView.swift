@@ -279,13 +279,17 @@ struct AxolotlEye: View {
 struct AxolotlExpressiveMouth: View {
     var color: Color = Color(red: 0.5, green: 0.8, blue: 1.0)
     var body: some View {
-        Path { path in
-            // Bigger, slight smile (arc)
-            path.move(to: CGPoint(x: 2, y: 14))
-            path.addQuadCurve(to: CGPoint(x: 22, y: 14), control: CGPoint(x: 12, y: 22))
+        ZStack {
+            Path { path in
+                // Left curve
+                path.move(to: CGPoint(x: 0, y: 18))
+                path.addQuadCurve(to: CGPoint(x: 16, y: 22), control: CGPoint(x: 6, y: 28))
+                // Right curve
+                path.addQuadCurve(to: CGPoint(x: 32, y: 18), control: CGPoint(x: 26, y: 28))
+            }
+            .stroke(Color.black.opacity(0.5), lineWidth: 3)
         }
-        .stroke(color, lineWidth: 4)
-        .frame(width: 24, height: 24)
+        .frame(width: 32, height: 48)
     }
 }
 struct AxolotlHand: View {
