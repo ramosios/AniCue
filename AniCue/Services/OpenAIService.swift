@@ -40,7 +40,7 @@ struct OpenAIService {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
-            "model": "gpt-4o",
+            "model": "gpt-3.5-turbo",
             "messages": [["role": "user", "content": queryPrompt]],
             "temperature": 0.5
         ]
@@ -104,7 +104,7 @@ struct OpenAIService {
         request.addValue("application/json", forHTTPHeaderField: "Content-Type")
 
         let body: [String: Any] = [
-            "model": "gpt-4o",
+            "model": "gpt-3.5-turbo",
             "messages": [["role": "user", "content": fullPrompt]],
             "temperature": 0.4
         ]
