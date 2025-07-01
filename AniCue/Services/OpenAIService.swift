@@ -6,9 +6,11 @@
 //
 import Foundation
 
-struct OpenAIService {
+class OpenAIService {
     let apiKey: String
     let session: URLSession
+
+    private var cachedGenreList: String?
 
     init(apiKey: String = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String ?? "",
          session: URLSession = .shared) {
@@ -23,16 +25,16 @@ struct OpenAIService {
             throw OpenAIError.invalidResponse
         }
 
-        let genreList = genreMap.map { "\($0.key): \($0.value)" }.joined(separator: ", ")
+        let genreList: String
+        if let cached = cachedGenreList {
+            genreList = cached
+        } else {
+            genreList = genreMap.map { "\($0.key): \($0.value)" }.joined(separator: ", ")
+            cachedGenreList = genreList
+        }
 
-        let queryPrompt = """
-        You are given this list of anime genres with IDs:
-        \(genreList)
-
-        Based on the user prompt: "\(prompt)"
-        Return a JSON array (only) of up to 1 genre IDs that best match the prompt. Example: [1]
-        Do not include any explanation, just the JSON array itself.
-        """
+        let systemPrompt = "You are an assistant that returns only a JSON array of genre IDs. No explanation."
+        let userPrompt = "Genre list: \(genreList). User prompt: \"\(prompt)\". Return a JSON array (max 1 genre ID) matching the prompt. Example: [1]."
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -41,7 +43,10 @@ struct OpenAIService {
 
         let body: [String: Any] = [
             "model": "gpt-3.5-turbo",
-            "messages": [["role": "user", "content": queryPrompt]],
+            "messages": [
+                ["role": "system", "content": systemPrompt],
+                ["role": "user", "content": userPrompt]
+            ],
             "temperature": 0.5
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
@@ -89,14 +94,8 @@ struct OpenAIService {
 
         let titles = animes.prefix(20).map(\.title)
 
-        let fullPrompt = """
-        Based on this user prompt: "\(prompt)"
-        From this list of anime titles, select the top 5 that best match the prompt:
-
-        \(titles.map { "- \($0)" }.joined(separator: "\n"))
-
-        Return only a JSON array of the selected titles. Example: ["Naruto", "Bleach", "Haikyu!!"]
-        """
+        let systemPrompt = "You are an assistant that returns only a JSON array of anime titles. No explanation."
+        let userPrompt = "User prompt: \"\(prompt)\". From this list, return a JSON array of the 5 best-matching titles: \(titles). Example: [\"Naruto\",\"Bleach\"]."
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
@@ -105,8 +104,11 @@ struct OpenAIService {
 
         let body: [String: Any] = [
             "model": "gpt-3.5-turbo",
-            "messages": [["role": "user", "content": fullPrompt]],
-            "temperature": 0.4
+            "messages": [
+                ["role": "system", "content": systemPrompt],
+                ["role": "user", "content": userPrompt]
+            ],
+            "temperature": 0.6
         ]
         request.httpBody = try JSONSerialization.data(withJSONObject: body)
 
