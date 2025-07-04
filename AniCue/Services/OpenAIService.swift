@@ -64,7 +64,20 @@ class OpenAIService {
         }
 
         let trimmed = message.trimmingCharacters(in: .whitespacesAndNewlines)
-        return try extractJSONArray(from: trimmed, as: [Int].self)
+
+        // Regex to extract JSON array from text
+        let regex = try NSRegularExpression(pattern: "\\[(.*?)\\]", options: [])
+        if let match = regex.firstMatch(in: trimmed, options: [], range: NSRange(location: 0, length: trimmed.utf16.count)) {
+            let nsRange = match.range
+            if let range = Range(nsRange, in: trimmed) {
+                let jsonArray = String(trimmed[range])
+                if let data = jsonArray.data(using: .utf8) {
+                    return try JSONDecoder().decode([Int].self, from: data)
+                }
+            }
+        }
+
+        throw OpenAIError.decodingFailed
     }
 
     func recommendTopAnime(from animes: [JikanAnime], prompt: String) async throws -> [JikanAnime] {
@@ -110,24 +123,21 @@ class OpenAIService {
         }
 
         let trimmed = content.trimmingCharacters(in: .whitespacesAndNewlines)
-        let topTitles = try extractJSONArray(from: trimmed, as: [String].self)
+        let pattern = #"(?s)\[.*?\]"#
+        guard let range = trimmed.range(of: pattern, options: .regularExpression) else {
+            throw OpenAIError.decodingFailed
+        }
+
+        let jsonString = String(trimmed[range])
+        guard let titleData = jsonString.data(using: .utf8) else {
+            throw OpenAIError.decodingFailed
+        }
+
+        let topTitles = try JSONDecoder().decode([String].self, from: titleData)
+
         return animes.filter { anime in
             topTitles.contains { $0.caseInsensitiveCompare(anime.title) == .orderedSame }
         }
-    }
-    private func extractJSONArray<T: Decodable>(from text: String, as type: T.Type) throws -> T {
-        let trimmed = text.trimmingCharacters(in: .whitespacesAndNewlines)
-        let regex = try NSRegularExpression(pattern: "\\[(.*?)\\]", options: [])
-        if let match = regex.firstMatch(in: trimmed, options: [], range: NSRange(location: 0, length: trimmed.utf16.count)) {
-            let nsRange = match.range
-            if let range = Range(nsRange, in: trimmed) {
-                let jsonArray = String(trimmed[range])
-                if let data = jsonArray.data(using: .utf8) {
-                    return try JSONDecoder().decode(T.self, from: data)
-                }
-            }
-        }
-        throw OpenAIError.decodingFailed
     }
 }
 extension OpenAIService: OpenAIServiceProtocol {}
