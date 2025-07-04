@@ -12,6 +12,11 @@ class UserPreferencesViewModel: ObservableObject {
             saveAnswers()
         }
     }
+    // Computed property for slider binding
+    var minimumScore: Double {
+        get { Double(selectedAnswers[2]) ?? 7 }
+        set { selectedAnswers[2] = String(format: "%g", newValue) }
+    }
     private let fileName = "user_preferences.json"
 
     // Allow tests to override the file path
