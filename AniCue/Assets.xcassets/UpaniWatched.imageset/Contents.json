@@ -1,17 +1,50 @@
 {
   "images" : [
     {
-      "filename" : "4187FB45-DD93-440F-9D2C-EED00AF88B4C.png",
+      "filename" : "F598A3C2-AFBD-43FB-9DEC-61BF7F687D88 2.png",
       "idiom" : "universal",
       "scale" : "1x"
     },
     {
-      "filename" : "4187FB45-DD93-440F-9D2C-EED00AF88B4C 1.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "F598A3C2-AFBD-43FB-9DEC-61BF7F687D88.png",
+      "idiom" : "universal",
+      "scale" : "1x"
+    },
+    {
+      "filename" : "F598A3C2-AFBD-43FB-9DEC-61BF7F687D88 3.png",
       "idiom" : "universal",
       "scale" : "2x"
     },
     {
-      "filename" : "4187FB45-DD93-440F-9D2C-EED00AF88B4C 2.png",
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "F598A3C2-AFBD-43FB-9DEC-61BF7F687D88 1.png",
+      "idiom" : "universal",
+      "scale" : "2x"
+    },
+    {
+      "filename" : "F598A3C2-AFBD-43FB-9DEC-61BF7F687D88 4.png",
+      "idiom" : "universal",
+      "scale" : "3x"
+    },
+    {
+      "appearances" : [
+        {
+          "appearance" : "luminosity",
+          "value" : "dark"
+        }
+      ],
+      "filename" : "D4FD7F3E-80E9-4977-B3C3-941161F1C0DD.png",
       "idiom" : "universal",
       "scale" : "3x"
     }
