@@ -36,33 +36,17 @@ private func normalizedFormat(for includeMovies: String) -> String? {
     }
 }
 
-private func normalizedVisibility(for visibilityPref: String) -> String? {
-    switch visibilityPref {
-    case "popular hits":
-        return "popular"
-    case "hidden gems":
-        return "niche"
-    case "niche":
-        return "obscure"
-    case "no preference":
-        return nil
-    default:
-        return visibilityPref.lowercased()
-    }
-}
-
-func formatUserPreference(from answers: [String]) -> (startDate: String?, endDate: String?, format: String?, popularity: String?) {
+func formatUserPreference(from answers: [String]) -> (startDate: String?, endDate: String?, format: String?, minimumScore: Double?) {
     guard answers.count >= 3 else {
         return (nil, nil, nil, nil)
     }
 
     let releasePref = answers[0].lowercased()
     let includeMovies = answers[1].lowercased()
-    let visibilityPref = answers[2].lowercased()
+    let minimunScore = Double(answers[2]) ?? 7.0
 
     let dateRangeResult = dateRange(for: releasePref)
     let formatResult = normalizedFormat(for: includeMovies)
-    let visibilityResult = normalizedVisibility(for: visibilityPref)
 
-    return (dateRangeResult.0, dateRangeResult.1, formatResult, visibilityResult)
+    return (dateRangeResult.0, dateRangeResult.1, formatResult, minimunScore)
 }

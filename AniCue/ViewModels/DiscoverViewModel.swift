@@ -19,7 +19,7 @@ class DiscoverViewModel: ObservableObject {
         self.openAIService = openAIService
         self.jikaService = jikaService
     }
-    func getRecommendations(for prompt: String, userPreferences: (startDate: String?, endDate: String?,format: String?,popularity: String?), avoiding animesToAvoid: [Int]) async {
+    func getRecommendations(for prompt: String, userPreferences: (startDate: String?, endDate: String?,format: String?,minimumScore: Double?), avoiding animesToAvoid: [Int]) async {
         isLoading = true
         errorMessage = nil
         animes = []
@@ -46,7 +46,7 @@ class DiscoverViewModel: ObservableObject {
                     endDate: end,
                     limit: 25,
                     page: 1,
-                    minimumScore: 7.0,
+                    minimumScore: userPreferences.minimumScore ?? 7.0,
                     type: format
                 )
             } catch {
