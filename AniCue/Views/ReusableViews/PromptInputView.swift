@@ -10,13 +10,12 @@ struct PromptInputView: View {
     @Binding var prompt: String
     var onSubmit: () -> Void
     @FocusState private var isFocused: Bool
-    
     private let placeholders = [
-            "e.g. dark psychological thrillers with mystery",
-            "e.g. wholesome slice of life with comedy",
-            "e.g. action-packed shonen with superpowers",
-            "e.g. heartwarming romance with school setting",
-            "e.g. mind-bending sci-fi adventures"
+            "dark psychological thrillers with mystery",
+            "wholesome slice of life with comedy",
+            "action-packed shonen with superpowers",
+            "heartwarming romance with school setting",
+            "mind-bending sci-fi adventures"
     ]
     @State private var placeholder: String
 
@@ -53,7 +52,14 @@ struct PromptInputView: View {
                     RoundedRectangle(cornerRadius: 14)
                         .stroke(Color.accentColor.opacity(0.3), lineWidth: 1)
                 )
-
+                .toolbar {
+                    ToolbarItemGroup(placement: .keyboard) {
+                    Spacer()
+                    Button("Done") {
+                        isFocused = false
+                            }
+                        }
+                    }
                 if prompt.isEmpty && !isFocused {
                     Text(placeholder)
                         .foregroundColor(.gray)
@@ -64,7 +70,7 @@ struct PromptInputView: View {
                 }
             }
 
-            Text("\(300 - prompt.count) characters remaining")
+            Text("\(200 - prompt.count) characters remaining")
                 .font(.caption)
                 .foregroundColor(.gray)
                 .frame(maxWidth: .infinity, alignment: .trailing)
