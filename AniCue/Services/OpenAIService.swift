@@ -94,7 +94,7 @@ class OpenAIService {
 
         let titles = animes.prefix(20).map(\.title)
 
-        let systemPrompt = "You are an assistant that returns only a JSON array of anime titles. No explanation."
+        let systemPrompt = "You are an assistant that returns only a JSON array of anime titles.Avoid recommending more than 1 anime from the same series. No explanation."
         let userPrompt = "User prompt: \"\(prompt)\". From this list, return a JSON array of the 5 best-matching titles: \(titles). Example: [\"Naruto\",\"Bleach\"]."
 
         var request = URLRequest(url: url)
