@@ -50,7 +50,6 @@
 			membershipExceptions = (
 				AniCueApp.swift,
 				Assets.xcassets,
-				Models/Anime.swift,
 				Models/JikanAnime.swift,
 				Models/OpenAIResponse.swift,
 				Models/UserPreferences.swift,
@@ -94,7 +93,6 @@
 				AniCueApp.swift,
 				Assets.xcassets,
 				Info.plist,
-				Models/Anime.swift,
 				Models/JikanAnime.swift,
 				Models/OpenAIResponse.swift,
 				Models/UserPreferences.swift,
@@ -328,6 +326,9 @@
 			);
 			mainGroup = C123CCF42DFE2DB700B27340;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C15D5FEF2E1A23FB002D884B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C123CCFE2DFE2DB700B27340 /* Products */;
 			projectDirPath = "";
@@ -626,6 +627,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -658,6 +660,7 @@
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = "";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.6;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -789,6 +792,17 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C15D5FEF2E1A23FB002D884B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.15.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = C123CCF52DFE2DB700B27340 /* Project object */;
 }
