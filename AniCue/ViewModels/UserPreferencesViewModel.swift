@@ -14,7 +14,7 @@ class UserPreferencesViewModel: ObservableObject {
     }
     // Computed property for slider binding
     var minimumScore: Double {
-        get { Double(selectedAnswers[2]) ?? 7 }
+        get { Double(selectedAnswers[2]) ?? 6.0 }
         set { selectedAnswers[2] = String(format: "%g", newValue) }
     }
     private let fileName = "user_preferences.json"

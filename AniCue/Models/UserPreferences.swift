@@ -10,7 +10,7 @@ struct UserPreferences: Codable {
     var answers: [String]
 }
 
-private func dateRange(for releasePref: String) -> (String?, String?) {
+private func dateRange(for releasePref: String) -> (String, String) {
     switch releasePref {
     case "recent":
         return ("2023-01-01", "2025-04-01")
@@ -21,29 +21,29 @@ private func dateRange(for releasePref: String) -> (String?, String?) {
     case "1990s or earlier":
         return ("1990-01-01", "1999-12-31")
     default:
-        return (nil, nil)
+        return ("", "")
     }
 }
 
-private func normalizedFormat(for includeMovies: String) -> String? {
+private func normalizedFormat(for includeMovies: String) -> String {
     switch includeMovies {
     case "no":
         return "tv"
     case "yes":
-        return nil
+        return ""
     default:
-        return nil
+        return ""
     }
 }
 
-func formatUserPreference(from answers: [String]) -> (startDate: String?, endDate: String?, format: String?, minimumScore: Double?) {
+func formatUserPreference(from answers: [String]) -> (startDate: String, endDate: String, format: String, minimumScore: Double) {
     guard answers.count >= 3 else {
-        return (nil, nil, nil, nil)
+        return ("", "", "", 6.0)
     }
 
     let releasePref = answers[0].lowercased()
     let includeMovies = answers[1].lowercased()
-    let minimunScore = Double(answers[2]) ?? 7.0
+    let minimunScore = Double(answers[2]) ?? 6.0
 
     let dateRangeResult = dateRange(for: releasePref)
     let formatResult = normalizedFormat(for: includeMovies)
