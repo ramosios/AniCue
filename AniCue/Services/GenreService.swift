@@ -6,13 +6,23 @@
 //
 import Foundation
 class GenreService {
-    static func loadGenreMap() -> [Int: String]? {
+    static func loadGenreMap() -> String? {
         guard let url = Bundle.main.url(forResource: "genres", withExtension: "json"),
               let data = try? Data(contentsOf: url),
               let rawMap = try? JSONDecoder().decode([String: String].self, from: data) else {
             return nil
         }
-        return rawMap.compactMapKeys { Int($0) }
+        let value = rawMap.compactMapKeys { Int($0) }
+        let result = value.map { "\($0.key): \($0.value)" }.joined(separator: ", ")
+        return result
+    }
+    static func getGenresFromUserDefaults() -> String? {
+        let defaults = UserDefaults.standard
+        if let genres = defaults.string(forKey: "genres") {
+            return genres
+        } else {
+            return nil
+        }
     }
 }
 extension Dictionary {

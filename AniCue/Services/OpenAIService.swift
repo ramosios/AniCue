@@ -21,20 +21,13 @@ class OpenAIService {
         guard !apiKey.isEmpty else { throw OpenAIError.missingAPIKey }
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else { throw OpenAIError.invalidResponse }
 
-        guard let genreMap = GenreService.loadGenreMap() else {
+        guard let genreMap = GenreService.getGenresFromUserDefaults() else {
             throw OpenAIError.invalidResponse
         }
-
-        let genreList: String
-        if let cached = cachedGenreList {
-            genreList = cached
-        } else {
-            genreList = genreMap.map { "\($0.key): \($0.value)" }.joined(separator: ", ")
-            cachedGenreList = genreList
-        }
+        cachedGenreList = genreMap
 
         let systemPrompt = "You are an assistant that returns only a JSON array of genre IDs. No explanation."
-        let userPrompt = "Genre list: \(genreList). User prompt: \"\(prompt)\". Return a JSON array (max 1 genre ID) matching the prompt. Example: [1]."
+        let userPrompt = "Genre list: \(genreMap). User prompt: \"\(prompt)\". Return a JSON array (max 1 genre ID) matching the prompt. Example: [1]."
 
         var request = URLRequest(url: url)
         request.httpMethod = "POST"

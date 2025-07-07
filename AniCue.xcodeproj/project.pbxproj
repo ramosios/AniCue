@@ -49,6 +49,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AniCueApp.swift,
+				AppDelegate.swift,
 				Assets.xcassets,
 				Models/JikanAnime.swift,
 				Models/OpenAIResponse.swift,
@@ -91,6 +92,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				AniCueApp.swift,
+				AppDelegate.swift,
 				Assets.xcassets,
 				Info.plist,
 				Models/JikanAnime.swift,

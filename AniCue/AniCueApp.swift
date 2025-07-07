@@ -9,6 +9,7 @@ import SwiftUI
 
 @main
 struct AniCueApp: App {
+    @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var userPreferences = UserPreferencesViewModel()
     @StateObject var favorites = WatchListViewModel()
     @StateObject var watched = WatchedViewModel()
