@@ -25,6 +25,15 @@ class GenreService {
         }
     }
 }
+enum GenreServiceError: Error, LocalizedError , Equatable {
+    case errorFetchingGenres
+
+    var errorDescription: String? {
+        switch self {
+        case .errorFetchingGenres: return "Unable to load genres"
+        }
+    }
+}
 extension Dictionary {
     func compactMapKeys<T>(_ transform: (Key) throws -> T?) rethrows -> [T: Value] {
         var result = [T: Value]()

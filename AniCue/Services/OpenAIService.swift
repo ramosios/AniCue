@@ -22,7 +22,7 @@ class OpenAIService {
         guard let url = URL(string: "https://api.openai.com/v1/chat/completions") else { throw OpenAIError.invalidResponse }
 
         guard let genreMap = GenreService.getGenresFromUserDefaults() else {
-            throw OpenAIError.invalidResponse
+            throw GenreServiceError.errorFetchingGenres
         }
         cachedGenreList = genreMap
 
