@@ -10,8 +10,6 @@ class OpenAIService {
     let apiKey: String
     let session: URLSession
 
-    private var cachedGenreList: String?
-
     init(apiKey: String = Bundle.main.infoDictionary?["OPENAI_API_KEY"] as? String ?? "",
          session: URLSession = .shared) {
         self.apiKey = apiKey
@@ -24,7 +22,6 @@ class OpenAIService {
         guard let genreMap = GenreService.getGenresFromUserDefaults() else {
             throw GenreServiceError.errorFetchingGenres
         }
-        cachedGenreList = genreMap
 
         let systemPrompt = "You are an assistant that returns only a JSON array of genre IDs. No explanation."
         let userPrompt = "Genre list: \(genreMap). User prompt: \"\(prompt)\". Return a JSON array (max 1 genre ID) matching the prompt. Example: [1]."
