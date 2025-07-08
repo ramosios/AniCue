@@ -20,6 +20,6 @@ protocol JikanServiceProtocol {
             limit: Int,
             page: Int,
             minimumScore: Double,
-            type: String?
+            type: String
         ) async throws -> [JikanAnime]
 }

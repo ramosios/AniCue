@@ -28,7 +28,7 @@ private func dateRange(for releasePref: String) -> (String, String) {
 private func normalizedFormat(for includeMovies: String) -> String {
     switch includeMovies {
     case "no":
-        return "tv"
+        return "TV"
     case "yes":
         return ""
     default:

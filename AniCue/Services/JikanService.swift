@@ -22,11 +22,11 @@ struct JikanService {
         limit: Int,
         page: Int,
         minimumScore: Double,
-        type: String?
+        type: String
     ) async throws -> [JikanAnime] {
         let genreQuery = genreIds.map(String.init).joined(separator: ",")
         var urlString = "\(baseURL)/anime?start_date=\(startDate)&end_date=\(endDate)&genres=\(genreQuery)&order_by=score&sort=desc&limit=\(limit)&page=\(page)"
-        if let type = type, ["tv", "movie"].contains(type.lowercased()) {
+        if type.isEmpty == false {
             urlString += "&type=\(type.capitalized)"
         }
 
