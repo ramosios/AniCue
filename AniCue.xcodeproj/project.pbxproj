@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		4F0754CFA7D154608F5FC448 /* Pods_AniCueTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6A8BB2AD2962EF9FF71336E3 /* Pods_AniCueTests.framework */; };
 		C15D60932E1C2B33002D884B /* RiveRuntime in Frameworks */ = {isa = PBXBuildFile; productRef = C15D60922E1C2B33002D884B /* RiveRuntime */; };
+		C15D61B02E1D7C7F002D884B /* Realm in Frameworks */ = {isa = PBXBuildFile; productRef = C15D61AF2E1D7C7F002D884B /* Realm */; };
+		C15D61B22E1D7C7F002D884B /* RealmSwift in Frameworks */ = {isa = PBXBuildFile; productRef = C15D61B12E1D7C7F002D884B /* RealmSwift */; };
 		CD98117B8A8A1BAA2C7D1985 /* Pods_AniCue_AniCueUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BC6DFBBACDED6F61E74BDA59 /* Pods_AniCue_AniCueUITests.framework */; };
 		E5FA2EEE1E2036DE10F3B282 /* Pods_AniCue.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CBC07187CF4936D52FEA019D /* Pods_AniCue.framework */; };
 /* End PBXBuildFile section */
@@ -164,6 +166,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C15D61B22E1D7C7F002D884B /* RealmSwift in Frameworks */,
+				C15D61B02E1D7C7F002D884B /* Realm in Frameworks */,
 				E5FA2EEE1E2036DE10F3B282 /* Pods_AniCue.framework in Frameworks */,
 				C15D60932E1C2B33002D884B /* RiveRuntime in Frameworks */,
 			);
@@ -335,6 +339,7 @@
 			packageReferences = (
 				C15D5FEF2E1A23FB002D884B /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
 				C15D60912E1C2B33002D884B /* XCRemoteSwiftPackageReference "rive-ios" */,
+				C15D61AE2E1D7C7F002D884B /* XCRemoteSwiftPackageReference "realm-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C123CCFE2DFE2DB700B27340 /* Products */;
@@ -817,6 +822,14 @@
 				minimumVersion = 6.9.5;
 			};
 		};
+		C15D61AE2E1D7C7F002D884B /* XCRemoteSwiftPackageReference "realm-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/realm/realm-swift";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -824,6 +837,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = C15D60912E1C2B33002D884B /* XCRemoteSwiftPackageReference "rive-ios" */;
 			productName = RiveRuntime;
+		};
+		C15D61AF2E1D7C7F002D884B /* Realm */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C15D61AE2E1D7C7F002D884B /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = Realm;
+		};
+		C15D61B12E1D7C7F002D884B /* RealmSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C15D61AE2E1D7C7F002D884B /* XCRemoteSwiftPackageReference "realm-swift" */;
+			productName = RealmSwift;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
