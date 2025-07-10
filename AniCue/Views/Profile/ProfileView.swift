@@ -8,9 +8,7 @@ struct ProfileView: View {
 
     @State private var profileImage: UIImage?
     @State private var selectedItem: PhotosPickerItem?
-    @State private var userName: String = "AniCue User"
-    @State private var isEditingName: Bool = false
-    @State private var tempUserName: String = ""
+    @State private var userName: String = "Upani User"
 
     private let userNameKey = "profileUserName"
     private let profileImageKey = "profileImageData"
@@ -33,12 +31,10 @@ struct ProfileView: View {
                         ProfileHeaderView(
                             profileImage: $profileImage,
                             selectedItem: $selectedItem,
-                            userName: $userName,
-                            isEditingName: $isEditingName,
-                            tempUserName: $tempUserName,
+                            userName: userName,
                             watchedCount: watched.animes.count,
-                            userNameKey: userNameKey,
-                            profileImageKey: profileImageKey
+                            profileImageKey: profileImageKey,
+                            userNameKey: userNameKey
                         )
 
                         VStack(spacing: 16) {
