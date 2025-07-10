@@ -6,7 +6,7 @@ struct LaunchScreenView: View {
         GeometryReader { geometry in
             VStack {
                 Spacer()
-                Image("Upani")
+                Image("UpaniLaunchScreen")
                     .resizable()
                     .scaledToFit()
                     .frame(width: geometry.size.width * 0.9, height: geometry.size.height * 0.6)

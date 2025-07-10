@@ -59,7 +59,11 @@ struct ProfileHeaderView: View {
         }
         .padding()
         .frame(maxWidth: .infinity)
-        .background(.ultraThinMaterial)
+        .background(
+            Image("UpaniBackground_Image1")
+                .resizable()
+                .scaledToFill()
+        )
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(radius: 5)
     }
