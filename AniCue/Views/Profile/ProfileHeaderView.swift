@@ -10,10 +10,8 @@ import PhotosUI
 struct ProfileHeaderView: View {
     @Binding var profileImage: UIImage?
     @Binding var selectedItem: PhotosPickerItem?
-    let userName : String
+    let userName: String
     let watchedCount: Int
-    let profileImageKey: String
-    let userNameKey : String
 
     var body: some View {
         VStack(spacing: 16) {
@@ -42,7 +40,7 @@ struct ProfileHeaderView: View {
                            let uiImage = UIImage(data: data) {
                             profileImage = uiImage
                             if let imageData = uiImage.jpegData(compressionQuality: 0.8) {
-                                UserDefaults.standard.set(imageData, forKey: profileImageKey)
+                                UserDefaults.standard.set(imageData, forKey: UserDefaultKeys.profileImageKey)
                             }
                         }
                     }

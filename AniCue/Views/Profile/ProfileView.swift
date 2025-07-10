@@ -10,14 +10,11 @@ struct ProfileView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var userName: String = "Upani User"
 
-    private let userNameKey = "profileUserName"
-    private let profileImageKey = "profileImageData"
-
     init() {
-        if let savedName = UserDefaults.standard.string(forKey: userNameKey) {
+        if let savedName = UserDefaults.standard.string(forKey: UserDefaultKeys.userNameKey) {
             _userName = State(initialValue: savedName)
         }
-        if let imageData = UserDefaults.standard.data(forKey: profileImageKey),
+        if let imageData = UserDefaults.standard.data(forKey: UserDefaultKeys.profileImageKey),
            let image = UIImage(data: imageData) {
             _profileImage = State(initialValue: image)
         }
@@ -32,9 +29,7 @@ struct ProfileView: View {
                             profileImage: $profileImage,
                             selectedItem: $selectedItem,
                             userName: userName,
-                            watchedCount: watched.animes.count,
-                            profileImageKey: profileImageKey,
-                            userNameKey: userNameKey
+                            watchedCount: watched.animes.count
                         )
 
                         VStack(spacing: 16) {
@@ -67,8 +62,8 @@ struct ProfileView: View {
                         primaryAction: {
                             favorites.clearAll()
                             watched.clearAll()
-                            UserDefaults.standard.removeObject(forKey: userNameKey)
-                            UserDefaults.standard.removeObject(forKey: profileImageKey)
+                            UserDefaults.standard.removeObject(forKey: UserDefaultKeys.userNameKey)
+                            UserDefaults.standard.removeObject(forKey: UserDefaultKeys.profileImageKey)
                             userName = "AniCue User"
                             profileImage = nil
                             showingConfirmReset = false
@@ -85,10 +80,10 @@ struct ProfileView: View {
             .animation(.easeInOut(duration: 0.3), value: showingConfirmReset)
         }
         .onAppear {
-            if let savedName = UserDefaults.standard.string(forKey: userNameKey) {
+            if let savedName = UserDefaults.standard.string(forKey: UserDefaultKeys.userNameKey) {
                 userName = savedName
             }
-            if let imageData = UserDefaults.standard.data(forKey: profileImageKey),
+            if let imageData = UserDefaults.standard.data(forKey: UserDefaultKeys.profileImageKey),
                let image = UIImage(data: imageData) {
                 profileImage = image
             }

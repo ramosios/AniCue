@@ -15,7 +15,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 
     private func loadGenresIfNeeded() {
         let defaults = UserDefaults.standard
-        if defaults.string(forKey: "genres") == nil {
+        if defaults.string(forKey: UserDefaultKeys.genresKey) == nil {
             defaults.set(GenreService.loadGenreMap(), forKey: "genres")
         }
     }
