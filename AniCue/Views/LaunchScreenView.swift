@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct LaunchScreenView: View {
+    @State private var opacity = 1.0
     var body: some View {
         GeometryReader { geometry in
             VStack {
@@ -16,10 +17,15 @@ struct LaunchScreenView: View {
                     .padding(.bottom, 50)
             }
             .frame(width: geometry.size.width, height: geometry.size.height)
+            .opacity(opacity)
+            .onAppear {
+                withAnimation(.easeOut(duration: 1.4)) {
+                    opacity = 0.0
+                }
+            }
         }
     }
 }
-
 #Preview {
     LaunchScreenView()
 }
