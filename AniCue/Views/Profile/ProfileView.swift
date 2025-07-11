@@ -42,7 +42,7 @@ struct ProfileView: View {
                                 UserPreferenceView()
                             }
                             ProfileNavigationLink(title: "Change Background Image", icon: "photo.on.rectangle.angled") {
-                                ProfileBackgroundChangerView(selectedBackground: $selectedBackground)
+                                ProfileBackgroundChangerView(selectedBackground: $selectedBackground, profileImage: profileImage, userName: userName, watchedCount: watched.animes.count)
                             }
                             Button(role: .destructive) {
                                 showingConfirmReset = true
@@ -71,7 +71,7 @@ struct ProfileView: View {
                             UserDefaults.standard.removeObject(forKey: UserDefaultKeys.profileImageKey)
                             userName = "AniCue User"
                             profileImage = nil
-                            selectedBackground = "UpaniBackground_Image2" // Reset to default
+                            selectedBackground = "UpaniBackground_Image1" // Reset to default
                             showingConfirmReset = false
                         },
                         dismiss: {

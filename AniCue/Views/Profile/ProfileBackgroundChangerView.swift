@@ -2,9 +2,9 @@ import SwiftUI
 
 struct ProfileBackgroundChangerView: View {
     @Binding var selectedBackground: String
-    @State private var profileImage: UIImage?
-    @State private var userName: String = "Username"
-    @State private var watchedCount: Int = 0
+    @State  var profileImage: UIImage?
+    @State  var userName: String = "Username"
+    @State  var watchedCount: Int = 0
     private let backgroundOptions = [
         "UpaniBackground_Image1",
         "UpaniBackground_Image2"
