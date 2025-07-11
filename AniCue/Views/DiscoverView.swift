@@ -38,7 +38,7 @@ struct DiscoverView: View {
                     inputIsFocused = false
                 }
 
-                ChatInputBar(
+                ChatInputBarView(
                     text: $prompt,
                     isFocused: $inputIsFocused,
                     action: sendPrompt
@@ -65,31 +65,6 @@ struct DiscoverView: View {
                 favorites: favorites,
                 watched: watched
             )
-        }
-    }
-}
-
-struct ChatInputBar: View {
-    @Binding var text: String
-    var isFocused: FocusState<Bool>.Binding
-    var action: () -> Void
-
-    var body: some View {
-        HStack(spacing: 12) {
-            TextField("Type your message…", text: $text)
-                .padding(.vertical, 10)
-                .padding(.horizontal)
-                .background(Color(UIColor.secondarySystemBackground))
-                .clipShape(Capsule())
-                .focused(isFocused)
-                .onSubmit(action)
-
-            Button(action: action) {
-                Image(systemName: "arrow.up.circle.fill")
-                    .font(.title)
-                    .foregroundColor(text.isEmpty ? .gray : .accentColor)
-            }
-            .disabled(text.isEmpty)
         }
     }
 }
