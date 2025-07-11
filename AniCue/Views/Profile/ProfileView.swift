@@ -29,7 +29,8 @@ struct ProfileView: View {
                             profileImage: $profileImage,
                             selectedItem: $selectedItem,
                             userName: userName,
-                            watchedCount: watched.animes.count
+                            watchedCount: watched.animes.count,
+                            background: "UpaniBackground_Image2"
                         )
 
                         VStack(spacing: 16) {
@@ -38,6 +39,9 @@ struct ProfileView: View {
                             }
                             ProfileNavigationLink(title: "Preferences", icon: "slider.horizontal.3") {
                                 UserPreferenceView()
+                            }
+                            ProfileNavigationLink(title: "Change Background Image", icon: "photo.on.rectangle.angled") {
+                                ProfileBackgroundChangerView()
                             }
                             Button(role: .destructive) {
                                 showingConfirmReset = true

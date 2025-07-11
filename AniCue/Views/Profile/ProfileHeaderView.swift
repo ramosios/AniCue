@@ -12,6 +12,7 @@ struct ProfileHeaderView: View {
     @Binding var selectedItem: PhotosPickerItem?
     let userName: String
     let watchedCount: Int
+    let background: String
 
     var body: some View {
         VStack(spacing: 16) {
@@ -60,9 +61,12 @@ struct ProfileHeaderView: View {
         .padding()
         .frame(maxWidth: .infinity)
         .background(
-            Image("UpaniBackground_Image1")
-                .resizable()
-                .scaledToFill()
+            ZStack {
+                Image(background)
+                    .resizable()
+                    .scaledToFill()
+                    Color.black.opacity(0.4)
+                }
         )
         .clipShape(RoundedRectangle(cornerRadius: 20))
         .shadow(radius: 5)
