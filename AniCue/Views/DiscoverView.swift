@@ -8,8 +8,21 @@ struct DiscoverView: View {
     @State private var prompt = ""
     @FocusState private var inputIsFocused: Bool
 
+    private struct SuggestedPrompt: Identifiable {
+        let id = UUID()
+        let text: String
+        let iconName: String
+    }
+
+    private let suggestedPrompts: [SuggestedPrompt] = [
+        SuggestedPrompt(text: "Top 10 action anime from the 90s", iconName: "flame.fill"),
+        SuggestedPrompt(text: "Suggest some psychological thrillers", iconName: "brain.head.profile"),
+        SuggestedPrompt(text: "What are some good romance anime?", iconName: "heart.fill"),
+        SuggestedPrompt(text: "I'm looking for a sci-fi series", iconName: "sparkles")
+    ]
+
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack(spacing: 0) {
                 ScrollView {
                     LazyVStack(spacing: 16) {
@@ -32,10 +45,43 @@ struct DiscoverView: View {
                             AnimeListView(animes: viewModel.animes, source: .discover)
                         }
                     }
-                    .padding()
+                    .padding(.vertical)
                 }
                 .onTapGesture {
                     inputIsFocused = false
+                }
+                .navigationBarTitleDisplayMode(.inline)
+
+                if !viewModel.isLoading && viewModel.animes.isEmpty {
+                    VStack(alignment: .leading, spacing: 12) {
+                        Text("Try one of these prompts")
+                            .font(.headline)
+                            .foregroundColor(.secondary)
+                            .padding(.horizontal)
+
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                ForEach(suggestedPrompts) { suggestion in
+                                    Button(action: {
+                                        prompt = suggestion.text
+                                        sendPrompt()
+                                    }, label: {
+                                        HStack {
+                                            Image(systemName: suggestion.iconName)
+                                            Text(suggestion.text)
+                                        }
+                                        .font(.subheadline)
+                                        .padding()
+                                        .background(.thinMaterial)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                    })
+                                    .buttonStyle(.plain)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                    }
+                    .padding(.bottom, 8)
                 }
 
                 ChatInputBarView(
@@ -45,12 +91,9 @@ struct DiscoverView: View {
                 )
                 .padding(.horizontal)
                 .padding(.vertical, 8)
-                .background(.regularMaterial)
-                .clipShape(Capsule())
             }
-            .navigationBarTitleDisplayMode(.inline)
+            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
-        .ignoresSafeArea(.keyboard, edges: .bottom)
     }
 
     private func sendPrompt() {
