@@ -9,6 +9,7 @@ struct ProfileView: View {
     @State private var profileImage: UIImage?
     @State private var selectedItem: PhotosPickerItem?
     @State private var userName: String = "Upani User"
+    @AppStorage(UserDefaultKeys.profileBackgroundKey) private var selectedBackground: String = "UpaniBackground_Image1"
 
     init() {
         if let savedName = UserDefaults.standard.string(forKey: UserDefaultKeys.userNameKey) {
@@ -30,7 +31,7 @@ struct ProfileView: View {
                             selectedItem: $selectedItem,
                             userName: userName,
                             watchedCount: watched.animes.count,
-                            background: "UpaniBackground_Image2"
+                            background: selectedBackground
                         )
 
                         VStack(spacing: 16) {
@@ -41,7 +42,7 @@ struct ProfileView: View {
                                 UserPreferenceView()
                             }
                             ProfileNavigationLink(title: "Change Background Image", icon: "photo.on.rectangle.angled") {
-                                ProfileBackgroundChangerView()
+                                ProfileBackgroundChangerView(selectedBackground: $selectedBackground)
                             }
                             Button(role: .destructive) {
                                 showingConfirmReset = true
@@ -70,6 +71,7 @@ struct ProfileView: View {
                             UserDefaults.standard.removeObject(forKey: UserDefaultKeys.profileImageKey)
                             userName = "AniCue User"
                             profileImage = nil
+                            selectedBackground = "UpaniBackground_Image2" // Reset to default
                             showingConfirmReset = false
                         },
                         dismiss: {

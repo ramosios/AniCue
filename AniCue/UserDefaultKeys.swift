@@ -8,5 +8,5 @@ struct UserDefaultKeys {
     static let genresKey = "genres"
     static let userNameKey = "profileUserName"
     static let profileImageKey = "profileImageData"
-    static let profileBackgroundKey = "profileBackgroundData"
+    static let profileBackgroundKey = "profileBackgroundName"
 }

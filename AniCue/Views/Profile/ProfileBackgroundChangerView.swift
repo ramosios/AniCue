@@ -1,12 +1,10 @@
 import SwiftUI
 
 struct ProfileBackgroundChangerView: View {
-    @Environment(\.dismiss) private var dismiss
-    @State private var selectedBackground: String
+    @Binding var selectedBackground: String
     @State private var profileImage: UIImage?
     @State private var userName: String = "Username"
     @State private var watchedCount: Int = 0
-    
     private let backgroundOptions = [
         "UpaniBackground_Image1",
         "UpaniBackground_Image2"
@@ -16,11 +14,6 @@ struct ProfileBackgroundChangerView: View {
         GridItem(.flexible()),
         GridItem(.flexible())
     ]
-
-    init() {
-        // Initialize state with the currently saved background or a default
-        _selectedBackground = State(initialValue: UserDefaults.standard.string(forKey: UserDefaultKeys.profileBackgroundKey) ?? "UpaniBackground_Image2")
-    }
 
     var body: some View {
         ScrollView {
@@ -71,7 +64,6 @@ struct ProfileBackgroundChangerView: View {
         .navigationTitle("Change Background")
         .navigationBarTitleDisplayMode(.inline)
     }
-
     private func saveSelection(background: String) {
         UserDefaults.standard.set(background, forKey: UserDefaultKeys.profileBackgroundKey)
     }
@@ -80,7 +72,7 @@ struct ProfileBackgroundChangerView: View {
 struct ProfileBackgroundChangerView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
-            ProfileBackgroundChangerView()
+            ProfileBackgroundChangerView(selectedBackground: .constant("UpaniBackground_Image2"))
         }
     }
 }
