@@ -39,7 +39,7 @@ struct DiscoverView: View {
                 }
                 .navigationBarTitleDisplayMode(.inline)
 
-                if !viewModel.isLoading && viewModel.animes.isEmpty {
+                if !viewModel.isLoading && viewModel.animes.isEmpty && !inputIsFocused {
                     VStack(alignment: .leading, spacing: 12) {
                         Text("Try one of these prompts")
                             .font(.headline)
@@ -79,7 +79,6 @@ struct DiscoverView: View {
                 .padding(.horizontal)
                 .padding(.vertical, 8)
             }
-            .ignoresSafeArea(.keyboard, edges: .bottom)
         }
     }
 
