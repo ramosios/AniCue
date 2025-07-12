@@ -8,19 +8,6 @@ struct DiscoverView: View {
     @State private var prompt = ""
     @FocusState private var inputIsFocused: Bool
 
-    private struct SuggestedPrompt: Identifiable {
-        let id = UUID()
-        let text: String
-        let iconName: String
-    }
-
-    private let suggestedPrompts: [SuggestedPrompt] = [
-        SuggestedPrompt(text: "Top 10 action anime from the 90s", iconName: "flame.fill"),
-        SuggestedPrompt(text: "Suggest some psychological thrillers", iconName: "brain.head.profile"),
-        SuggestedPrompt(text: "What are some good romance anime?", iconName: "heart.fill"),
-        SuggestedPrompt(text: "I'm looking for a sci-fi series", iconName: "sparkles")
-    ]
-
     var body: some View {
         NavigationStack {
             VStack(spacing: 0) {
@@ -61,7 +48,7 @@ struct DiscoverView: View {
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 12) {
-                                ForEach(suggestedPrompts) { suggestion in
+                                ForEach(SuggestedPrompts.all) { suggestion in
                                     Button(action: {
                                         prompt = suggestion.text
                                         sendPrompt()
