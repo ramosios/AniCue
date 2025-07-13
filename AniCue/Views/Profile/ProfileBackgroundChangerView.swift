@@ -7,7 +7,8 @@ struct ProfileBackgroundChangerView: View {
     @State  var watchedCount: Int = 0
     private let backgroundOptions = [
         "UpaniBackground_Image1",
-        "UpaniBackground_Image2"
+        "UpaniBackground_Image2",
+        "UpaniBackground_Image3"
     ]
 
     private let columns = [
