@@ -87,6 +87,13 @@ struct DiscoverView: View {
             }
         }
         .onAppear(perform: loadProfileImage)
+        /// Haptic feedback when loading state changes 
+        .onChange(of: viewModel.isLoading) { oldValue, newValue in
+            if oldValue && !newValue {
+                let generator = UINotificationFeedbackGenerator()
+                generator.notificationOccurred(.success)
+            }
+        }
     }
 
     private func sendPrompt() {
