@@ -6,7 +6,9 @@ struct DiscoverView: View {
     @EnvironmentObject var favorites: WatchListViewModel
     @EnvironmentObject var watched: WatchedViewModel
     @State private var prompt = ""
+    @State private var submittedPrompt: String?
     @FocusState private var inputIsFocused: Bool
+    @State private var profileImage: UIImage?
 
     var body: some View {
         NavigationStack {
@@ -16,6 +18,10 @@ struct DiscoverView: View {
                         if let error = viewModel.errorMessage {
                             ErrorBanner(message: error)
                                 .padding(.horizontal)
+                        }
+
+                        if let prompt = submittedPrompt, !viewModel.isLoading, !viewModel.animes.isEmpty {
+                            UserPromptView(prompt: prompt, profileImage: profileImage)
                         }
 
                         if viewModel.isLoading {
@@ -80,11 +86,13 @@ struct DiscoverView: View {
                 .padding(.vertical, 8)
             }
         }
+        .onAppear(perform: loadProfileImage)
     }
 
     private func sendPrompt() {
         guard !prompt.isEmpty else { return }
         let messageToSend = prompt
+        submittedPrompt = messageToSend
         prompt = ""
         inputIsFocused = false
         Task {
@@ -94,6 +102,13 @@ struct DiscoverView: View {
                 favorites: favorites,
                 watched: watched
             )
+        }
+    }
+
+    private func loadProfileImage() {
+        if let imageData = UserDefaults.standard.data(forKey: UserDefaultKeys.profileImageKey),
+           let image = UIImage(data: imageData) {
+            profileImage = image
         }
     }
 }

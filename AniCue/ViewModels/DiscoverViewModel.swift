@@ -5,6 +5,7 @@
 //  Created by Jorge Ramos on 15/06/25.
 //
 import Foundation
+import SwiftUI
 
 @MainActor
 class DiscoverViewModel: ObservableObject {
@@ -68,5 +69,4 @@ class DiscoverViewModel: ObservableObject {
 
         isLoading = false
     }
-
 }
