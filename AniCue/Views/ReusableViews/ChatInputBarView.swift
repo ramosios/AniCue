@@ -8,7 +8,7 @@ struct ChatInputBarView: View {
 
     var body: some View {
         VStack(alignment: .trailing, spacing: 8) {
-            TextField("Ask me anything...", text: $text, axis: .vertical)
+            TextField("What´s your anime vibe today?", text: $text, axis: .vertical)
                 .focused(isFocused)
                 .lineLimit(1...5)
                 .padding(.horizontal, 5)
@@ -19,12 +19,22 @@ struct ChatInputBarView: View {
                     }
                 }
 
-            Button(action: action) {
-                Image(systemName: "arrow.up.circle.fill")
-                    .font(.largeTitle)
-                    .symbolRenderingMode(.multicolor)
+            HStack {
+                NavigationLink(destination: UserPreferenceView()) {
+                    Image(systemName: "gearshape.fill")
+                        .font(.title)
+                        .foregroundColor(.gray)
+                }
+
+                Spacer()
+
+                Button(action: action) {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.largeTitle)
+                        .symbolRenderingMode(.multicolor)
+                }
+                .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
             }
-            .disabled(text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
         }
         .padding(8)
         .background(.thinMaterial)

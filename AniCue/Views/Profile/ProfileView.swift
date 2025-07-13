@@ -38,7 +38,7 @@ struct ProfileView: View {
                             ProfileNavigationLink(title: "Watched Anime", icon: "eye.fill") {
                                 WatchedAnimeView()
                             }
-                            ProfileNavigationLink(title: "Preferences", icon: "slider.horizontal.3") {
+                            ProfileNavigationLink(title: "Discover Preferences", icon: "slider.horizontal.3") {
                                 UserPreferenceView()
                             }
                             ProfileNavigationLink(title: "Change Background Image", icon: "photo.on.rectangle.angled") {
