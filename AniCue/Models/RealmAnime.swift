@@ -11,7 +11,6 @@ import RealmSwift
 enum AnimeListType: String, PersistableEnum {
     case watched
     case watchlist
-    case none // For not in any list
 }
 
 // MARK: - Main Anime Model
@@ -45,11 +44,12 @@ class RealmAnime: Object {
     @Persisted var streaming = List<RealmStreaming>()
     @Persisted var titleSynonyms = List<String>()
     // Add enum property for list type
-    @Persisted var listType: AnimeListType = .none
+    @Persisted var listType: AnimeListType
     // Conversion methods
-    convenience init(from anime: JikanAnime) {
+    convenience init(from anime: JikanAnime, listType: AnimeListType) {
         self.init()
         self.malId = anime.malId
+        self.listType = listType
         self.title = anime.title
         self.titleEnglish = anime.titleEnglish
         self.titleJapanese = anime.titleJapanese
