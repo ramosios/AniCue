@@ -8,9 +8,10 @@ import Foundation
 import RealmSwift
 
 // MARK: - List Type Enum
-enum AnimeListType {
+enum AnimeListType: String, PersistableEnum {
     case watched
     case watchlist
+    case none // For not in any list
 }
 
 // MARK: - Main Anime Model
@@ -43,6 +44,8 @@ class RealmAnime: Object {
     @Persisted var demographics = List<RealmEntity>()
     @Persisted var streaming = List<RealmStreaming>()
     @Persisted var titleSynonyms = List<String>()
+    // Add enum property for list type
+    @Persisted var listType: AnimeListType = .none
     // Conversion methods
     convenience init(from anime: JikanAnime) {
         self.init()
@@ -332,10 +335,4 @@ class RealmStreaming: EmbeddedObject {
             url: url
         )
     }
-}
-
-// MARK: - Container for Lists
-class AnimeListContainer: Object {
-    @Persisted var watched = List<RealmAnime>()
-    @Persisted var watchlist = List<RealmAnime>()
 }
