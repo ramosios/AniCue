@@ -1,6 +1,6 @@
-# AniCue
+# Upani
 
-AniCue is an iOS app for discovering, tracking, and managing your anime watchlist and watched shows.
+Upani is an iOS app for discovering, tracking, and managing your anime watchlist and watched shows.
 
 ## Features
 
