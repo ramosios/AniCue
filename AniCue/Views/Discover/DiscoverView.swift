@@ -26,7 +26,7 @@ struct DiscoverView: View {
 
                         if viewModel.isLoading {
                             UpaniAnimation()
-                                .padding(.top, 25)
+                                .padding(.top, 200)
                         } else if viewModel.noRecommendations {
                             Image("UpaniEmptyResults")
                                 .resizable()
