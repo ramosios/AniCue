@@ -1,6 +1,6 @@
 # Upani
 
-Upani is an iOS app for discovering, tracking, and managing your anime watchlist and watched shows.
+Upani is an iOS app for discovering, tracking, and managing your anime watchlist and watched shows. The Open Ai Api uses the prompt and user preferences to recommend the best animes that fit the parameters. 
 
 ## Features
 
