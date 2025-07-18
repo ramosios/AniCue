@@ -2,9 +2,8 @@ import SwiftUI
 
 struct DiscoverView: View {
     @StateObject private var viewModel = DiscoverViewModel()
+    @ObservedObject var animeList = AnimeListManager.shared
     @ObservedObject var userPreferences = UserPreferencesViewModel.shared
-    @EnvironmentObject var favorites: WatchListViewModel
-    @EnvironmentObject var watched: WatchedViewModel
     @State private var prompt = ""
     @State private var submittedPrompt: String?
     @FocusState private var inputIsFocused: Bool
@@ -106,8 +105,7 @@ struct DiscoverView: View {
             await viewModel.formatDataApiCalls(
                 for: messageToSend,
                 preferences: userPreferences,
-                favorites: favorites,
-                watched: watched
+                animeList: animeList
             )
         }
     }

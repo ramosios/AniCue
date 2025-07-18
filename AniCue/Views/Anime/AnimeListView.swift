@@ -1,8 +1,6 @@
 import SwiftUI
 
 struct AnimeListView: View {
-    @EnvironmentObject var favorites: WatchListViewModel
-    @EnvironmentObject var watched: WatchedViewModel
     @ObservedObject var animeList = AnimeListManager.shared
     let animes: [JikanAnime]
     let source: AnimeListSource

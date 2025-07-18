@@ -2,8 +2,7 @@ import SwiftUI
 import PhotosUI
 
 struct ProfileView: View {
-    @EnvironmentObject var favorites: WatchListViewModel
-    @EnvironmentObject var watched: WatchedViewModel
+    @ObservedObject var animeList = AnimeListManager.shared
     @State private var showingConfirmReset = false
 
     @State private var profileImage: UIImage?
@@ -30,7 +29,7 @@ struct ProfileView: View {
                             profileImage: $profileImage,
                             selectedItem: $selectedItem,
                             userName: userName,
-                            watchedCount: watched.animes.count,
+                            watchedCount: animeList.watched.count,
                             background: selectedBackground
                         )
 
@@ -42,7 +41,7 @@ struct ProfileView: View {
                                 UserPreferenceView()
                             }
                             ProfileNavigationLink(title: "Change Background Image", icon: "photo.on.rectangle.angled") {
-                                ProfileBackgroundChangerView(selectedBackground: $selectedBackground, profileImage: profileImage, userName: userName, watchedCount: watched.animes.count)
+                                ProfileBackgroundChangerView(selectedBackground: $selectedBackground, profileImage: profileImage, userName: userName, watchedCount: animeList.watched.count)
                             }
                             Button(role: .destructive) {
                                 showingConfirmReset = true
@@ -65,8 +64,7 @@ struct ProfileView: View {
                         title: "Confirm Reset",
                         message: "Are you sure you want to clear all data?",
                         primaryAction: {
-                            favorites.clearAll()
-                            watched.clearAll()
+                            animeList.deleteAll()
                             UserDefaults.standard.removeObject(forKey: UserDefaultKeys.userNameKey)
                             UserDefaults.standard.removeObject(forKey: UserDefaultKeys.profileImageKey)
                             userName = "AniCue User"
