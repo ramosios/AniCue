@@ -7,19 +7,19 @@
 import SwiftUI
 
 struct WatchedAnimeView: View {
-    @EnvironmentObject var watched: WatchedViewModel
+    @ObservedObject var animeList = AnimeListManager.shared
 
     var body: some View {
         NavigationView {
             Group {
-                if watched.animes.isEmpty {
+                if animeList.watched.isEmpty {
                     VStack(spacing: 16) {
                         Image("UpaniWatched")
                     }
                     .padding()
                     .multilineTextAlignment(.center)
                 } else {
-                    AnimeListView(animes: watched.animes, source: .watched)
+                    AnimeListView(animes: animeList.watched, source: .watched)
                 }
             }
             .navigationTitle("Watched")

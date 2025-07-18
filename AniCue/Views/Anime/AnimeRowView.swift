@@ -2,9 +2,9 @@ import SwiftUI
 
 struct AnimeRowView: View {
     let anime: JikanAnime
-    let isFavorite: Bool
+    let isWatchlisted: Bool
     let isWatched: Bool
-    let onToggleFavorite: () -> Void
+    let onToggleWatchlisted: () -> Void
     let onMarkWatched: () -> Void
 
     @StateObject private var imageLoader = ImageLoader()
@@ -70,8 +70,8 @@ struct AnimeRowView: View {
             }
 
             HStack(spacing: 14) {
-                Button(action: onToggleFavorite) {
-                    Image(systemName: isFavorite ? "heart.fill" : "heart")
+                Button(action: onToggleWatchlisted) {
+                    Image(systemName: isWatchlisted ? "heart.fill" : "heart")
                         .foregroundColor(.teal)
                         .padding(6)
                         .background(Circle().fill(Color.teal.opacity(0.15)))

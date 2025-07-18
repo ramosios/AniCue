@@ -3,7 +3,7 @@ import SwiftUI
 struct AnimeListView: View {
     @EnvironmentObject var favorites: WatchListViewModel
     @EnvironmentObject var watched: WatchedViewModel
-
+    @ObservedObject var animeList = AnimeListManager.shared
     let animes: [JikanAnime]
     let source: AnimeListSource
 
@@ -19,31 +19,29 @@ struct AnimeListView: View {
         ScrollView {
             LazyVStack(spacing: 16) {
                 ForEach(animes, id: \.malId) { anime in
-                    let isFavorite = favorites.isWatchListed(anime)
-                    let isWatched = watched.isWatched(anime)
+                    let isWatchlisted = animeList.isAnimeInList(anime, listType: .watchlist)
+                    let isWatched = animeList.isAnimeInList(anime, listType: .watched)
 
                     NavigationLink(destination: AnimeDetailView(anime: anime)) {
                         AnimeRowView(
                             anime: anime,
-                            isFavorite: isFavorite,
+                            isWatchlisted: isWatchlisted,
                             isWatched: isWatched,
-                            onToggleFavorite: {
+                            onToggleWatchlisted: {
                                 withAnimation {
-                                    if isFavorite {
-                                        favorites.remove(anime)
+                                    if isWatchlisted {
+                                        animeList.removeAnime(anime)
                                     } else {
-                                        favorites.add(anime)
-                                        watched.remove(anime)
+                                        animeList.addOrUpdateAnime(anime, listType: .watchlist)
                                     }
                                 }
                             },
                             onMarkWatched: {
                                 withAnimation {
                                     if isWatched {
-                                        watched.remove(anime)
+                                        animeList.removeAnime(anime)
                                     } else {
-                                        watched.markAsWatched(anime)
-                                        favorites.remove(anime)
+                                        animeList.addOrUpdateAnime(anime, listType: .watched)
                                     }
                                 }
                             }

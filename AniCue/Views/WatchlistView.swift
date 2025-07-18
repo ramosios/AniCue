@@ -7,12 +7,12 @@
 import SwiftUI
 
 struct WatchlistView: View {
-    @EnvironmentObject var watchList: WatchListViewModel
+    @ObservedObject var animeList = AnimeListManager.shared
 
     var body: some View {
         NavigationView {
             Group {
-                if watchList.animes.isEmpty {
+                if animeList.watchlist.isEmpty {
                     VStack(spacing: 16) {
                         Image("UpaniWatchlist")
                             .font(.system(size: 40))
@@ -21,7 +21,7 @@ struct WatchlistView: View {
                     .padding()
                     .multilineTextAlignment(.center)
                 } else {
-                    AnimeListView(animes: watchList.animes, source: .watchlist)
+                    AnimeListView(animes: animeList.watchlist, source: .watchlist)
                 }
             }
             .navigationTitle("Watchlist")
