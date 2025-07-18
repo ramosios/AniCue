@@ -4,7 +4,6 @@ import SwiftUI
 @main
 struct AniCueApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
-    @StateObject private var userPreferences = UserPreferencesViewModel()
     @StateObject var favorites = WatchListViewModel()
     @StateObject var watched = WatchedViewModel()
     @State private var isShowingLaunchAnimation = true
@@ -16,7 +15,6 @@ struct AniCueApp: App {
                     LaunchScreenView()
                 } else {
                     ContentView()
-                        .environmentObject(userPreferences)
                         .environmentObject(favorites)
                         .environmentObject(watched)
                         .accentColor(.teal)

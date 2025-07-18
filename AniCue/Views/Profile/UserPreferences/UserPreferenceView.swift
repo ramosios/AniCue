@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct UserPreferenceView: View {
-    @EnvironmentObject var viewModel: UserPreferencesViewModel
+    @ObservedObject var viewModel = UserPreferencesViewModel.shared
     @State private var showingHelpIndex: Int?
 
     private let questions = [

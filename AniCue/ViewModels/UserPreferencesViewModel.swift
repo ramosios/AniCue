@@ -7,6 +7,7 @@
 import Foundation
 
 class UserPreferencesViewModel: ObservableObject {
+    static let shared = UserPreferencesViewModel()
     @Published var selectedAnswers: [String] = ["", "", ""] {
         didSet {
             saveAnswers()
