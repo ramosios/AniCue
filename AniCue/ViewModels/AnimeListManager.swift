@@ -1,24 +1,24 @@
-//
-//  AnimeListManager.swift
-//  AniCue
-//
-//  Created by Jorge Ramos on 15/07/25.
-//
 import Foundation
 import RealmSwift
 
 class AnimeListManager: ObservableObject {
+    static let shared = AnimeListManager()
     private let realm: Realm
+
+    @Published var watchlist: [JikanAnime] = []
+    @Published var watched: [JikanAnime] = []
 
     init() {
         do {
             realm = try Realm()
+            refreshLists()
         } catch {
             fatalError("Failed to initialize Realm: \(error)")
         }
     }
 
     func addOrUpdateAnime(_ anime: JikanAnime, listType: AnimeListType) {
+        objectWillChange.send()
         if let existing = realm.object(ofType: RealmAnime.self, forPrimaryKey: anime.malId) {
             try? realm.write {
                 existing.listType = listType
@@ -29,6 +29,26 @@ class AnimeListManager: ObservableObject {
                 realm.add(realmAnime)
             }
         }
+        refreshLists()
+    }
+
+    func removeAnime(_ anime: JikanAnime) {
+        objectWillChange.send()
+        if let object = realm.object(ofType: RealmAnime.self, forPrimaryKey: anime.malId) {
+            try? realm.write {
+                realm.delete(object)
+            }
+        }
+        refreshLists()
+    }
+
+    func deleteAll() {
+        objectWillChange.send()
+        let allAnimes = realm.objects(RealmAnime.self)
+        try? realm.write {
+            realm.delete(allAnimes)
+        }
+        refreshLists()
     }
 
     func getAnimes(for listType: AnimeListType) -> [JikanAnime] {
@@ -41,18 +61,8 @@ class AnimeListManager: ObservableObject {
         return object.listType == listType
     }
 
-    func removeAnime(_ anime: JikanAnime) {
-        if let object = realm.object(ofType: RealmAnime.self, forPrimaryKey: anime.malId) {
-            try? realm.write {
-                realm.delete(object)
-            }
-        }
-    }
-    
-    func deleteAll() {
-        let allAnimes = realm.objects(RealmAnime.self)
-        try? realm.write {
-            realm.delete(allAnimes)
-        }
+    private func refreshLists() {
+        watchlist = getAnimes(for: .watchlist)
+        watched = getAnimes(for: .watched)
     }
 }
