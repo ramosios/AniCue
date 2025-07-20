@@ -53,7 +53,7 @@ struct DiscoverView: View {
 
                         ScrollView(.horizontal, showsIndicators: false) {
                             HStack(spacing: 12) {
-                                ForEach(SuggestedPrompts.all) { suggestion in
+                                ForEach(SuggestedPrompts.randomThree()) { suggestion in
                                     Button(action: {
                                         prompt = suggestion.text
                                         sendPrompt()
