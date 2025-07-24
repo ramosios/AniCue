@@ -69,6 +69,7 @@
 			membershipExceptions = (
 				AniCueApp.swift,
 				Assets.xcassets,
+				Models/GeminiResponse.swift,
 				Models/JikanAnime.swift,
 				Models/OpenAIResponse.swift,
 				Models/RealmAnime.swift,
@@ -117,6 +118,7 @@
 				AniCueApp.swift,
 				Assets.xcassets,
 				Info.plist,
+				Models/GeminiResponse.swift,
 				Models/JikanAnime.swift,
 				Models/OpenAIResponse.swift,
 				Models/RealmAnime.swift,
