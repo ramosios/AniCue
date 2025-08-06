@@ -9,4 +9,5 @@ struct UserDefaultKeys {
     static let userNameKey = "profileUserName"
     static let profileImageKey = "profileImageData"
     static let profileBackgroundKey = "profileBackgroundName"
+    static let isMyAnimeListEnabledKey = "isMyAnimeListEnabled"
 }
