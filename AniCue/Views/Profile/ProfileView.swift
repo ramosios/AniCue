@@ -9,7 +9,7 @@ struct ProfileView: View {
     @State private var selectedItem: PhotosPickerItem?
     @State private var userName: String = "Upani User"
     @AppStorage(UserDefaultKeys.profileBackgroundKey) private var selectedBackground: String = "UpaniBackground_Image1"
-    @AppStorage(UserDefaultKeys.isMyAnimeListEnabledKey) private var isMyAnimeListEnabled: Bool = true
+    @AppStorage(UserDefaultKeys.isMyAnimeListEnabledKey) private var isMyAnimeListEnabled: Bool = false
 
     init() {
         if let savedName = UserDefaults.standard.string(forKey: UserDefaultKeys.userNameKey) {
@@ -44,15 +44,17 @@ struct ProfileView: View {
                             ProfileNavigationLink(title: "Change Background Image", icon: "photo.on.rectangle.angled") {
                                 ProfileBackgroundChangerView(selectedBackground: $selectedBackground, profileImage: profileImage, userName: userName, watchedCount: animeList.watched.count)
                             }
-                            Button(role: .destructive) {
-                                isMyAnimeListEnabled = true
-                            } label: {
-                                Label("Connect MyAnimeList Account", systemImage: "link")
-                                    .padding()
-                                    .frame(maxWidth: .infinity)
-                                    .background(Color.blue.opacity(0.1))
-                                    .foregroundColor(.blue)
-                                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                            if isMyAnimeListEnabled {
+                                Button(role: .destructive) {
+                                    saveMyAnimeListEnabled(value: true)
+                                } label: {
+                                    Label("Connect MyAnimeList Account", systemImage: "link")
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.blue.opacity(0.1))
+                                        .foregroundColor(.blue)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                }
                             }
                             Button(role: .destructive) {
                                 showingConfirmReset = true
@@ -104,4 +106,7 @@ struct ProfileView: View {
             }
         }
     }
+}
+private func saveMyAnimeListEnabled(value: Bool) {
+    UserDefaults.standard.set(value, forKey: UserDefaultKeys.isMyAnimeListEnabledKey)
 }
