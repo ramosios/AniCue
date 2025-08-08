@@ -15,19 +15,24 @@ struct ContentView: View {
             DiscoverView()
                 .tag(CustomTabBarView.Tab.discover)
                 .tabItem {
-                    Label("Discover", systemImage: "sparkles")
+                    Label(CustomTabBarView.Tab.discover.title, systemImage: CustomTabBarView.Tab.discover.iconName)
                 }
 
             WatchlistView()
                 .tag(CustomTabBarView.Tab.watchlist)
                 .tabItem {
-                    Label("Watchlist", systemImage: "heart.fill")
+                    Label(CustomTabBarView.Tab.watchlist.title, systemImage: CustomTabBarView.Tab.watchlist.iconName)
+                }
+            GamesView()
+                .tag(CustomTabBarView.Tab.games)
+                .tabItem {
+                    Label(CustomTabBarView.Tab.games.title, systemImage: CustomTabBarView.Tab.games.iconName)
                 }
 
             ProfileView()
                 .tag(CustomTabBarView.Tab.profile)
                 .tabItem {
-                    Label("Profile", systemImage: "person")
+                    Label(CustomTabBarView.Tab.profile.title, systemImage: CustomTabBarView.Tab.profile.iconName)
                 }
         }
         .edgesIgnoringSafeArea(.bottom)

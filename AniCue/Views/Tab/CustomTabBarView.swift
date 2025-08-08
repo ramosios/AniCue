@@ -4,12 +4,13 @@ struct CustomTabBarView: View {
     @Binding var selectedTab: Tab
 
     enum Tab: Int, CaseIterable {
-        case discover, watchlist, profile
+        case discover, watchlist, games, profile
 
         var iconName: String {
             switch self {
             case .discover: return "sparkles"
             case .watchlist: return "heart.fill"
+            case .games: return "gamecontroller"
             case .profile: return "person.crop.circle"
             }
         }
@@ -18,6 +19,7 @@ struct CustomTabBarView: View {
             switch self {
             case .discover: return "Discover"
             case .watchlist: return "Watchlist"
+            case .games: return "Games"
             case .profile: return "Profile"
             }
         }

@@ -29,7 +29,7 @@ struct SuggestedPrompts {
         SuggestedPrompt(text: "Anime with beautiful animation", iconName: "paintbrush.fill"),
         SuggestedPrompt(text: "Wholesome anime about friendship", iconName: "hands.clap.fill"),
         SuggestedPrompt(text: "Anime with clever plot twists", iconName: "arrow.triangle.branch"),
-        SuggestedPrompt(text: "Anime that made you cry", iconName: "drop.fill"),
+        SuggestedPrompt(text: "Anime that make you cry", iconName: "drop.fill"),
         SuggestedPrompt(text: "Cozy anime to watch on a rainy day", iconName: "cloud.rain.fill"),
         SuggestedPrompt(text: "Anime with unique world-building", iconName: "globe.asia.australia.fill")
     ]
