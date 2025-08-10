@@ -18,7 +18,7 @@ struct GamesView: View {
             ScrollView {
                 LazyVGrid(columns: columns, spacing: 24) {
                     ForEach(games) { game in
-                        NavigationLink(destination: GameDetailView(game: game)) {
+                        NavigationLink(destination: MatchView()) {
                             ZStack {
                                 RoundedRectangle(cornerRadius: 24)
                                     .fill(
@@ -57,23 +57,6 @@ struct GamesView: View {
             }
             .navigationTitle("Select a Game")
         }
-        .accentColor(.teal)
-    }
-}
-
-struct GameDetailView: View {
-    let game: Game
-
-    var body: some View {
-        VStack {
-            Image(game.imageName)
-                .resizable()
-                .aspectRatio(contentMode: .fit)
-                .frame(height: 200)
-            Text(game.name)
-                .font(.largeTitle)
-        }
-        .navigationTitle(game.name)
         .accentColor(.teal)
     }
 }
