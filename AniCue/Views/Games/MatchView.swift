@@ -41,14 +41,6 @@ struct MatchView: View {
         }
     }
 
-    private func like() {
-        swipeCard(at: 0, direction: .right)
-    }
-
-    private func dislike() {
-        swipeCard(at: 0, direction: .left)
-    }
-
     var body: some View {
         VStack {
             // Card Stack
@@ -77,24 +69,6 @@ struct MatchView: View {
                 }
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-
-            // Action Buttons
-            HStack(spacing: 40) {
-                Button(action: dislike) {
-                    Image(systemName: "xmark")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.red)
-                        .padding()
-                        .background(Circle().fill(Color.white).shadow(radius: 5))
-                }
-                Button(action: like) {
-                    Image(systemName: "heart.fill")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundColor(.green)
-                        .padding()
-                        .background(Circle().fill(Color.white).shadow(radius: 5))
-                }
-            }
             .padding(.vertical)
         }
         .padding(.horizontal)

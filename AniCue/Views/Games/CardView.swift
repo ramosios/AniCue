@@ -23,7 +23,7 @@ struct CardView: View {
                     Color(.systemGray5)
                     ProgressView()
                 }
-                .frame(width: 320, height: 500)
+                .frame(width: 400, height: 600)
                 .cornerRadius(20)
                 .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
 
@@ -54,7 +54,7 @@ struct CardView: View {
                     )
                 }
             }
-            .frame(width: 320, height: 500)
+            .frame(width: 400, height: 600)
             .cornerRadius(20)
 
             // Swipe indicator
