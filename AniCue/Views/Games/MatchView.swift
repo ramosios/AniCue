@@ -8,26 +8,45 @@ import SwiftUI
 
 struct MatchView: View {
     @State private var animes: [JikanAnime] = JikanAnime.sampleData
+    @State private var cardOffsets: [Int: CGSize] = [:]
 
-    private func removeTopCard() {
-        if !animes.isEmpty {
-            animes.removeFirst()
+    private enum SwipeDirection {
+        case left, right
+    }
+
+    private func removeCard(at index: Int) {
+        guard index >= 0 && index < animes.count else { return }
+        let animeId = animes[index].id
+        animes.remove(at: index)
+        cardOffsets.removeValue(forKey: animeId)
+    }
+
+    private func swipeCard(at index: Int, direction: SwipeDirection) {
+        guard index >= 0 && index < animes.count else { return }
+        let animeId = animes[index].id
+
+        withAnimation(.spring()) {
+            switch direction {
+            case .left:
+                cardOffsets[animeId] = CGSize(width: -500, height: 0)
+            case .right:
+                cardOffsets[animeId] = CGSize(width: 500, height: 0)
+            }
+        }
+
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            if let firstIndex = animes.firstIndex(where: { $0.id == animeId }) {
+                removeCard(at: firstIndex)
+            }
         }
     }
 
-    private func superLike() {
-        // Handle super like logic
-        removeTopCard()
-    }
-
     private func like() {
-        // Handle like logic
-        removeTopCard()
+        swipeCard(at: 0, direction: .right)
     }
 
     private func dislike() {
-        // Handle dislike logic
-        removeTopCard()
+        swipeCard(at: 0, direction: .left)
     }
 
     var body: some View {
@@ -39,62 +58,53 @@ struct MatchView: View {
                         .font(.headline)
                         .foregroundColor(.gray)
                 } else {
-                    ForEach(animes.indices, id: \.self) { index in
-                        let anime = animes[index]
-                        CardView(anime: anime, onRemove: {
-                            if index == 0 { // Ensure only the top card can be removed
-                                removeTopCard()
+                    ForEach(Array(animes.enumerated().reversed()), id: \.element.id) { index, anime in
+                        CardView(
+                            anime: .constant(anime),
+                            offset: Binding(
+                                get: { cardOffsets[anime.id] ?? .zero },
+                                set: { cardOffsets[anime.id] = $0 }
+                            ),
+                            onRemove: {
+                                if let firstIndex = animes.firstIndex(where: { $0.id == anime.id }) {
+                                    let direction: SwipeDirection = (cardOffsets[anime.id]?.width ?? 0) > 0 ? .right : .left
+                                    swipeCard(at: firstIndex, direction: direction)
+                                }
                             }
-                        })
-                        .padding(.horizontal)
-                        // Stack from back to front
-                        .zIndex(Double(animes.count - 1 - index))
-                        // Only allow the top card to be swiped
-                        .allowsHitTesting(index == 0)
+                        )
+                        .allowsHitTesting(index == 0) // Only top card is interactive
                     }
                 }
             }
-            .padding(.top, 20)
-
-            Spacer()
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             // Action Buttons
-            HStack(spacing: 20) {
-                // Swipe Left Button
+            HStack(spacing: 40) {
                 Button(action: dislike) {
                     Image(systemName: "xmark")
-                        .font(.title)
+                        .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.red)
                         .padding()
                         .background(Circle().fill(Color.white).shadow(radius: 5))
                 }
-
-                // Super Like Button
-                Button(action: superLike) {
-                    Image(systemName: "star.fill")
-                        .font(.title)
-                        .foregroundColor(.blue)
-                        .padding()
-                        .background(Circle().fill(Color.white).shadow(radius: 5))
-                }
-
-                // Swipe Right Button
                 Button(action: like) {
                     Image(systemName: "heart.fill")
-                        .font(.title)
+                        .font(.system(size: 24, weight: .bold))
                         .foregroundColor(.green)
                         .padding()
                         .background(Circle().fill(Color.white).shadow(radius: 5))
                 }
             }
-            .padding(.bottom)
+            .padding(.vertical)
         }
+        .padding(.horizontal)
+        .background(Color(.systemGroupedBackground).ignoresSafeArea())
         .navigationTitle("Find Your Match")
         .navigationBarTitleDisplayMode(.inline)
     }
 }
 
-// Sample data for previewing
+// Sample data and Preview remain the same
 extension JikanAnime {
     static var sampleData: [JikanAnime] {
         [

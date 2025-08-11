@@ -3,12 +3,13 @@
 //  AniCue
 //
 //  Created by Jorge Ramos on 10/08/25.
-//
 import SwiftUI
+
 struct CardView: View {
-    @State private var offset = CGSize.zero
-    let anime: JikanAnime
-    let onRemove: () -> Void
+    @Binding var anime: JikanAnime
+    @Binding var offset: CGSize
+
+    var onRemove: () -> Void
 
     var body: some View {
         ZStack {
@@ -25,6 +26,7 @@ struct CardView: View {
                 .frame(width: 320, height: 500)
                 .cornerRadius(20)
                 .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
+
                 // Gradient Overlay for Text
                 VStack {
                     Spacer()
@@ -77,14 +79,15 @@ struct CardView: View {
                 .onChanged { gesture in
                     offset = gesture.translation
                 }
-                .onEnded { _ in
-                    if abs(offset.width) > 100 {
-                        onRemove()
-                    } else {
-                        offset = .zero
+                .onEnded { gesture in
+                    withAnimation(.spring()) {
+                        if abs(gesture.translation.width) > 100 {
+                            onRemove()
+                        } else {
+                            offset = .zero
+                        }
                     }
                 }
         )
-        .animation(.spring(), value: offset)
     }
 }
