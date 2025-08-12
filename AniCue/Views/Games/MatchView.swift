@@ -7,61 +7,26 @@
 import SwiftUI
 
 struct MatchView: View {
-    @State private var animes: [JikanAnime] = JikanAnime.sampleData
-    @State private var cardOffsets: [Int: CGSize] = [:]
-
-    private enum SwipeDirection {
-        case left, right
-    }
-
-    private func removeCard(at index: Int) {
-        guard index >= 0 && index < animes.count else { return }
-        let animeId = animes[index].id
-        animes.remove(at: index)
-        cardOffsets.removeValue(forKey: animeId)
-    }
-
-    private func swipeCard(at index: Int, direction: SwipeDirection) {
-        guard index >= 0 && index < animes.count else { return }
-        let animeId = animes[index].id
-
-        withAnimation(.spring()) {
-            switch direction {
-            case .left:
-                cardOffsets[animeId] = CGSize(width: -500, height: 0)
-            case .right:
-                cardOffsets[animeId] = CGSize(width: 500, height: 0)
-            }
-        }
-
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-            if let firstIndex = animes.firstIndex(where: { $0.id == animeId }) {
-                removeCard(at: firstIndex)
-            }
-        }
-    }
+    @StateObject private var viewModel = MatchViewModel()
 
     var body: some View {
         VStack {
             // Card Stack
             ZStack {
-                if animes.isEmpty {
+                if viewModel.animes.isEmpty {
                     Text("No more anime!")
                         .font(.headline)
                         .foregroundColor(.gray)
                 } else {
-                    ForEach(Array(animes.enumerated().reversed()), id: \.element.id) { index, anime in
+                    ForEach(Array(viewModel.animes.enumerated().reversed()), id: \.element.id) { index, anime in
                         CardView(
                             anime: .constant(anime),
                             offset: Binding(
-                                get: { cardOffsets[anime.id] ?? .zero },
-                                set: { cardOffsets[anime.id] = $0 }
+                                get: { viewModel.cardOffsets[anime.id] ?? .zero },
+                                set: { viewModel.cardOffsets[anime.id] = $0 }
                             ),
                             onRemove: {
-                                if let firstIndex = animes.firstIndex(where: { $0.id == anime.id }) {
-                                    let direction: SwipeDirection = (cardOffsets[anime.id]?.width ?? 0) > 0 ? .right : .left
-                                    swipeCard(at: firstIndex, direction: direction)
-                                }
+                                viewModel.swipeCard(for: anime)
                             }
                         )
                         .allowsHitTesting(index == 0) // Only top card is interactive
