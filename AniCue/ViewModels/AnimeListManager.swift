@@ -7,6 +7,7 @@ class AnimeListManager: ObservableObject {
 
     @Published var watchlist: [JikanAnime] = []
     @Published var watched: [JikanAnime] = []
+    @Published var downloaded: [JikanAnime] = []
 
     init() {
         do {
@@ -14,6 +15,35 @@ class AnimeListManager: ObservableObject {
             refreshLists()
         } catch {
             fatalError("Failed to initialize Realm: \(error)")
+        }
+    }
+
+    func loadDownloadedAnimesFromJSON(from filename: String) throws {
+        guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
+            throw LocalLoaderError.fileNotFound(filename)
+        }
+
+        let data: Data
+        do {
+            data = try Data(contentsOf: url)
+        } catch {
+            throw LocalLoaderError.dataLoadingFailed(error)
+        }
+
+        do {
+            let response = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
+            try realm.write {
+                for anime in response.data {
+                    if let existing = realm.object(ofType: RealmAnime.self, forPrimaryKey: anime.malId) {
+                        existing.listType = .downloaded
+                    } else {
+                        let realmAnime = RealmAnime(from: anime, listType: .downloaded)
+                        realm.add(realmAnime)
+                    }
+                }
+            }
+        } catch {
+            throw LocalLoaderError.decodingFailed(error)
         }
     }
 
@@ -64,5 +94,21 @@ class AnimeListManager: ObservableObject {
     private func refreshLists() {
         watchlist = getAnimes(for: .watchlist)
         watched = getAnimes(for: .watched)
+    }
+}
+enum LocalLoaderError: Error, LocalizedError {
+    case fileNotFound(String)
+    case dataLoadingFailed(Error)
+    case decodingFailed(Error)
+
+    var errorDescription: String? {
+        switch self {
+        case .fileNotFound(let filename):
+            return "The file '\(filename).json' was not found in the app bundle."
+        case .dataLoadingFailed(let error):
+            return "Failed to load data from the file: \(error.localizedDescription)"
+        case .decodingFailed(let error):
+            return "Failed to decode the JSON data: \(error.localizedDescription)"
+        }
     }
 }
