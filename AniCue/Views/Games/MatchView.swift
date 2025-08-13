@@ -55,10 +55,3 @@ extension JikanAnime {
     }
 }
 
-struct MatchView_Previews: PreviewProvider {
-    static var previews: some View {
-        NavigationView {
-            MatchView()
-        }
-    }
-}
