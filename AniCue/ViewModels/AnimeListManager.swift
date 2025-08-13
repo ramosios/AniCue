@@ -19,33 +19,28 @@ class AnimeListManager: ObservableObject {
     }
 
     func loadDownloadedAnimesFromJSON(from filename: String) throws {
-        guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
-            throw LocalLoaderError.fileNotFound(filename)
-        }
+           guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
+               throw LocalLoaderError.fileNotFound(filename)
+           }
 
-        let data: Data
-        do {
-            data = try Data(contentsOf: url)
-        } catch {
-            throw LocalLoaderError.dataLoadingFailed(error)
-        }
+           let data: Data
+           do {
+               data = try Data(contentsOf: url)
+           } catch {
+               throw LocalLoaderError.dataLoadingFailed(error)
+           }
 
-        do {
-            let response = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
-            try realm.write {
-                for anime in response.data {
-                    if let existing = realm.object(ofType: RealmAnime.self, forPrimaryKey: anime.malId) {
-                        existing.listType = .downloaded
-                    } else {
-                        let realmAnime = RealmAnime(from: anime, listType: .downloaded)
-                        realm.add(realmAnime)
-                    }
-                }
-            }
-        } catch {
-            throw LocalLoaderError.decodingFailed(error)
-        }
-    }
+           do {
+               let response = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
+               let realmAnimes = response.data.map { RealmAnime(from: $0, listType: .downloaded) }
+               try realm.write {
+                   realm.add(realmAnimes, update: .modified)
+               }
+               refreshLists()
+           } catch {
+               throw LocalLoaderError.decodingFailed(error)
+           }
+       }
 
     func addOrUpdateAnime(_ anime: JikanAnime, listType: AnimeListType) {
         objectWillChange.send()
@@ -94,6 +89,7 @@ class AnimeListManager: ObservableObject {
     private func refreshLists() {
         watchlist = getAnimes(for: .watchlist)
         watched = getAnimes(for: .watched)
+        downloaded = getAnimes(for: .downloaded)
     }
 }
 enum LocalLoaderError: Error, LocalizedError {
