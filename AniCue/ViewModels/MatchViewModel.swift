@@ -7,6 +7,7 @@
 import SwiftUI
 
 class MatchViewModel: ObservableObject {
+    @ObservedObject var animeList = AnimeListManager.shared
     @Published var animes: [JikanAnime] = []
     @Published var cardOffsets: [Int: CGSize] = [:]
 
@@ -19,8 +20,7 @@ class MatchViewModel: ObservableObject {
     }
 
     func loadAnimes() {
-        // In a real app, you would fetch this from an API
-        self.animes = JikanAnime.sampleData
+        self.animes = animeList.downloaded
     }
 
     private func removeCard(at index: Int) {
