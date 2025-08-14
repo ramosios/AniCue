@@ -7,9 +7,11 @@
 
 import UIKit
 import SwiftUICore
+import OSLog
 
 class AppDelegate: NSObject, UIApplicationDelegate {
     @ObservedObject var animeList = AnimeListManager.shared
+    private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.example.unknown", category: "AppDelegate")
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         loadGenresIfNeeded()
         loadDownloadedAnimesIfNeeded()
@@ -27,7 +29,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
             do {
                 try animeList.loadDownloadedAnimesFromJSON(from: "Page1")
             } catch {
-                    print("Failed to load downloaded animes: \(error)")
+                Self.logger.error("Failed to load downloaded animes: \(error.localizedDescription)")
                 }
             }
         }
