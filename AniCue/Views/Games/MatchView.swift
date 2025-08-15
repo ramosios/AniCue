@@ -8,17 +8,17 @@ import SwiftUI
 
 struct MatchView: View {
     @StateObject private var viewModel = MatchViewModel()
+    private let cardLimit = 5 // Limit the number of cards rendered at once
 
     var body: some View {
         VStack {
-            // Card Stack
             ZStack {
                 if viewModel.animes.isEmpty {
                     Text("No more anime!")
                         .font(.headline)
                         .foregroundColor(.gray)
                 } else {
-                    ForEach(Array(viewModel.animes.enumerated().reversed()), id: \.element.id) { index, anime in
+                    ForEach(Array(viewModel.animes.prefix(cardLimit).enumerated().reversed()), id: \.element.id) { index, anime in
                         CardView(
                             anime: .constant(anime),
                             offset: Binding(

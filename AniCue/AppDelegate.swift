@@ -25,12 +25,15 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         }
     }
     private func loadDownloadedAnimesIfNeeded() {
-        if animeList.downloaded.isEmpty {
-            do {
-                try animeList.loadDownloadedAnimesFromJSON(from: "Page1")
-            } catch {
-                Self.logger.error("Failed to load downloaded animes: \(error.localizedDescription)")
+            if animeList.downloaded.isEmpty {
+                let fileNames = ["Page1", "Page2","Page3","Page4","Page5"]
+                for fileName in fileNames {
+                    do {
+                        try animeList.loadDownloadedAnimesFromJSON(from: fileName)
+                    } catch {
+                        Self.logger.error("Failed to load downloaded animes from '\(fileName)': \(error.localizedDescription)")
                 }
             }
         }
+    }
 }
