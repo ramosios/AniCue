@@ -26,7 +26,7 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     }
     private func loadDownloadedAnimesIfNeeded() {
             if animeList.downloaded.isEmpty {
-                let fileNames = ["Page1", "Page2","Page3","Page4","Page5"]
+                let fileNames = ["Page1"]
                 for fileName in fileNames {
                     do {
                         try animeList.loadDownloadedAnimesFromJSON(from: fileName)
