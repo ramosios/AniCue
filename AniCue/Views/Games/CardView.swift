@@ -1,8 +1,3 @@
-//
-//  CardView.swift
-//  AniCue
-//
-//  Created by Jorge Ramos on 10/08/25.
 import SwiftUI
 
 struct CardView: View {
@@ -25,9 +20,13 @@ struct CardView: View {
                 }
                 .frame(width: 400, height: 600)
                 .cornerRadius(20)
-                .shadow(color: .black.opacity(0.2), radius: 10, y: 5)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20)
+                        .stroke(Color.white.opacity(0.7), lineWidth: 2)
+                )
+                .shadow(color: .black.opacity(0.25), radius: 12, y: 8)
 
-                // Gradient Overlay for Text
+                // Stronger Gradient Overlay for Text
                 VStack {
                     Spacer()
                     HStack {
@@ -36,10 +35,12 @@ struct CardView: View {
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .foregroundColor(.white)
+                                .shadow(color: .black.opacity(0.8), radius: 4, x: 0, y: 2)
                             if let type = anime.type, let episodes = anime.episodes {
                                 Text("\(type) • \(episodes) episodes")
                                     .font(.subheadline)
-                                    .foregroundColor(.white.opacity(0.8))
+                                    .foregroundColor(.white.opacity(0.85))
+                                    .shadow(color: .black.opacity(0.7), radius: 2, x: 0, y: 1)
                             }
                         }
                         Spacer()
@@ -47,10 +48,15 @@ struct CardView: View {
                     .padding()
                     .background(
                         LinearGradient(
-                            colors: [.black.opacity(0.6), .clear],
+                            colors: [
+                                .black.opacity(0.85),
+                                .black.opacity(0.5),
+                                .clear
+                            ],
                             startPoint: .bottom,
                             endPoint: .top
                         )
+                        .cornerRadius(16)
                     )
                 }
             }
