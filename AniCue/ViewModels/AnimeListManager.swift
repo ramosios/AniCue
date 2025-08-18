@@ -91,6 +91,13 @@ class AnimeListManager: ObservableObject {
         watched = getAnimes(for: .watched)
         downloaded = getAnimes(for: .downloaded)
     }
+    
+    func allListMalIds() -> [Int] {
+        let watchedIds = watched.map { $0.malId }
+        let watchlistIds = watchlist.map { $0.malId }
+        let downloadedIds = downloaded.map { $0.malId }
+        return Array(Set(watchedIds + watchlistIds + downloadedIds))
+    }
 }
 enum LocalLoaderError: Error, LocalizedError {
     case fileNotFound(String)

@@ -10,6 +10,7 @@ class MatchViewModel: ObservableObject {
     @ObservedObject var animeList = AnimeListManager.shared
     @Published var animes: [JikanAnime] = []
     @Published var cardOffsets: [Int: CGSize] = [:]
+    @Published var errorMessage: String?
 
     enum SwipeDirection {
         case left, right
@@ -29,6 +30,21 @@ class MatchViewModel: ObservableObject {
         animes.remove(at: index)
         cardOffsets.removeValue(forKey: animeId)
     }
+    func fetchPopularAnime(excludedMalIds: [Int] = [], limit: Int = 25, page: Int = 1) async {
+            let service = JikanService()
+            do {
+                let popular = try await service.fetchMostPopularAnime(
+                    excludedMalIds: excludedMalIds,
+                    limit: limit,
+                    page: page
+                )
+                DispatchQueue.main.async {
+                    self.animes = popular
+                }
+            } catch {
+                self.errorMessage = error.localizedDescription
+            }
+        }
 
     func swipeCard(for anime: JikanAnime) {
         guard let index = animes.firstIndex(where: { $0.id == anime.id }) else { return }
