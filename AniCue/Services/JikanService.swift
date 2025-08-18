@@ -104,6 +104,26 @@ struct JikanService {
 
         return all
     }
+    func fetchMostPopularAnime(
+        excludedMalIds: [Int] = [],
+        limit: Int = 25,
+        page: Int = 1
+    ) async throws -> [JikanAnime] {
+        let urlString = "\(baseURL)/anime?order_by=popularity&sort=desc&limit=\(limit)&page=\(page)"
+        guard let url = URL(string: urlString) else { throw JikanAPIError.invalidURL }
+
+        let (data, response) = try await session.data(from: url)
+        guard let httpResp = response as? HTTPURLResponse, (200...299).contains(httpResp.statusCode) else {
+            throw JikanAPIError.requestFailed
+        }
+
+        do {
+            let decoded = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
+            return decoded.data.filter { !excludedMalIds.contains($0.malId) }
+        } catch {
+            throw JikanAPIError.decodingFailed
+        }
+    }
 }
 
 extension JikanService: JikanServiceProtocol {}
