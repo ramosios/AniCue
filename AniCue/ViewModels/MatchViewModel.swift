@@ -30,21 +30,24 @@ class MatchViewModel: ObservableObject {
         animes.remove(at: index)
         cardOffsets.removeValue(forKey: animeId)
     }
-    func fetchPopularAnime(excludedMalIds: [Int] = [], limit: Int = 25, page: Int = 1) async {
-            let service = JikanService()
-            do {
-                let popular = try await service.fetchMostPopularAnime(
-                    excludedMalIds: excludedMalIds,
-                    limit: limit,
-                    page: page
-                )
-                DispatchQueue.main.async {
-                    self.animes = popular
-                }
-            } catch {
-                self.errorMessage = error.localizedDescription
+    func fetchPopularAnime() async {
+        let excludedMalIds = animeList.allListMalIds()
+        let service = JikanService()
+        do {
+            let popular = try await service.fetchMostPopularAnime(
+                excludedMalIds: excludedMalIds,
+                limit: 25,
+                page: 1
+            )
+            for anime in popular {
+                self.animeList.addOrUpdateAnime(anime, listType: .downloaded)
             }
+            loadAnimes()
+            
+        } catch {
+            self.errorMessage = error.localizedDescription
         }
+    }
 
     func swipeCard(for anime: JikanAnime) {
         guard let index = animes.firstIndex(where: { $0.id == anime.id }) else { return }
