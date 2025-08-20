@@ -58,6 +58,7 @@ class MatchViewModel: ObservableObject {
                 cardOffsets[anime.id] = CGSize(width: -500, height: 0)
             case .right:
                 cardOffsets[anime.id] = CGSize(width: 500, height: 0)
+                animeList.addOrUpdateAnime(anime, listType: .watchlist)
             }
         }
 
