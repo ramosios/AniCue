@@ -91,7 +91,6 @@ class AnimeListManager: ObservableObject {
         watched = getAnimes(for: .watched)
         downloaded = getAnimes(for: .downloaded)
     }
-    
     func allListMalIds() -> [Int] {
         let watchedIds = watched.map { $0.malId }
         let watchlistIds = watchlist.map { $0.malId }
