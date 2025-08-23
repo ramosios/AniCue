@@ -17,7 +17,6 @@ struct AniCueApp: App {
                 }
             }
             .onAppear {
-                // Hide the launch animation after 1.2 seconds
                 DispatchQueue.main.asyncAfter(deadline: .now() + 1.4) {
                     withAnimation {
                         isShowingLaunchAnimation = false
