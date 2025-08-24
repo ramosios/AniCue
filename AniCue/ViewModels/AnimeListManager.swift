@@ -36,7 +36,7 @@ class AnimeListManager: ObservableObject {
                try realm.write {
                    realm.add(realmAnimes, update: .modified)
                }
-               refreshLists()
+               updateList(list:.downloaded)
            } catch {
                throw LocalLoaderError.decodingFailed(error)
            }
@@ -54,7 +54,7 @@ class AnimeListManager: ObservableObject {
                 realm.add(realmAnime)
             }
         }
-        refreshLists()
+        updateList(list: listType)
     }
 
     func removeAnime(_ anime: JikanAnime) {
@@ -64,7 +64,7 @@ class AnimeListManager: ObservableObject {
                 realm.delete(object)
             }
         }
-        refreshLists()
+        updateList(list:.watched)
     }
 
     func deleteAll() {
@@ -91,12 +91,15 @@ class AnimeListManager: ObservableObject {
         watched = getAnimes(for: .watched)
         downloaded = getAnimes(for: .downloaded)
     }
-    func allListMalIds() -> [Int] {
-        let watchedIds = watched.map { $0.malId }
-        let watchlistIds = watchlist.map { $0.malId }
-        let downloadedIds = downloaded.map { $0.malId }
-        return Array(Set(watchedIds + watchlistIds + downloadedIds))
+    private func updateList(list: AnimeListType) {
+        if list == .downloaded {
+            downloaded = getAnimes(for:list)
+        } else{
+            watched = getAnimes(for:list)
+            watchlist = getAnimes(for:list)
+        }
     }
+        
 }
 enum LocalLoaderError: Error, LocalizedError {
     case fileNotFound(String)
