@@ -10,37 +10,39 @@ class AnimeListManager: ObservableObject {
     @Published var downloaded: [JikanAnime] = []
 
     init() {
-        do {
-            realm = try Realm()
-            refreshLists()
-        } catch {
-            fatalError("Failed to initialize Realm: \(error)")
+        guard let defaultRealmURL = Realm.Configuration.defaultConfiguration.fileURL else {
+                fatalError("Could not get default Realm file URL.")
+            }
+        let isFirstLaunch = !FileManager.default.fileExists(atPath: defaultRealmURL.path)
+
+        if isFirstLaunch {
+            if let bundledRealmURL = Bundle.main.url(forResource: "PreloadedAnimes", withExtension: "realm") {
+            do {
+                try FileManager.default.copyItem(at: bundledRealmURL, to: defaultRealmURL)
+                } catch {
+                    fatalError("Failed to copy preloaded Realm file: \(error)")
+                    }
+                }
+            }
+
+            do {
+                realm = try Realm()
+
+                if isFirstLaunch {
+                    // On first launch, ensure all preloaded animes are in the downloaded list.
+                    let allAnimes = realm.objects(RealmAnime.self)
+                    try realm.write {
+                        for anime in allAnimes {
+                            anime.listType = .downloaded
+                        }
+                    }
+                }
+
+                refreshLists()
+            } catch {
+                fatalError("Failed to initialize Realm: \(error)")
+            }
         }
-    }
-
-    func loadDownloadedAnimesFromJSON(from filename: String) throws {
-           guard let url = Bundle.main.url(forResource: filename, withExtension: "json") else {
-               throw LocalLoaderError.fileNotFound(filename)
-           }
-
-           let data: Data
-           do {
-               data = try Data(contentsOf: url)
-           } catch {
-               throw LocalLoaderError.dataLoadingFailed(error)
-           }
-
-           do {
-               let response = try JSONDecoder().decode(JikanAnimeListResponse.self, from: data)
-               let realmAnimes = response.data.map { RealmAnime(from: $0, listType: .downloaded) }
-               try realm.write {
-                   realm.add(realmAnimes, update: .modified)
-               }
-               updateList(list: .downloaded)
-           } catch {
-               throw LocalLoaderError.decodingFailed(error)
-           }
-       }
 
     func addOrUpdateAnime(_ anime: JikanAnime, listType: AnimeListType) {
         objectWillChange.send()

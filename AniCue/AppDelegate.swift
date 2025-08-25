@@ -14,7 +14,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
     private static let logger = Logger(subsystem: Bundle.main.bundleIdentifier ?? "com.example.unknown", category: "AppDelegate")
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]? = nil) -> Bool {
         loadGenresIfNeeded()
-        loadDownloadedAnimesIfNeeded()
         return true
     }
 
@@ -22,18 +21,6 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         let defaults = UserDefaults.standard
         if defaults.string(forKey: UserDefaultKeys.genresKey) == nil {
             defaults.set(GenreService.loadGenreMap(), forKey: "genres")
-        }
-    }
-    private func loadDownloadedAnimesIfNeeded() {
-            if animeList.downloaded.isEmpty {
-                let fileNames = DownloadedAnimesFileNames.initialFileNames
-                for fileName in fileNames {
-                    do {
-                        try animeList.loadDownloadedAnimesFromJSON(from: fileName)
-                    } catch {
-                        Self.logger.error("Failed to load downloaded animes from '\(fileName)': \(error.localizedDescription)")
-                }
-            }
         }
     }
 }
